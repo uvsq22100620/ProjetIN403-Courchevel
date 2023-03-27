@@ -26,7 +26,7 @@ sommets = {
     19 : "TD_3vallees",
     20 : "TF_marquis",
     21 : "TF_3vallees",
-    22 : "TF_granges",
+    22 : "TF_troika",
     23 : "R_bosses",
     24 : "TF_ptebosse",
     25 : "B_praline_1",
@@ -193,5 +193,4 @@ sommets = {
     186 : "B_jeanblanc_1",
     187 : "TF_stade",
     188 : "TD_combe",
-    189 : "TF_troika"
-}
+    }
