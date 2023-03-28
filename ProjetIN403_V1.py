@@ -401,4 +401,15 @@ graphe = {
         (4, 5, 'r') : [1, 'rochers'],
         (5, 1, 'ts') : [2, 'chapelets'],
         (5, 10, 'v') : [1, 'praline'],
+        (6, 4, 'r') : [0.2, 'rochers'],
+        (6, 5, 'r') : [1, 'bel air'],
+        (6, 7, 'b') : [0.5, 'ariondaz'],
+        (6, 188, 'v') : [0.3, 'praline'],
+        (7, 8, 'b') : [0.2, 'granges'],
+        (7, 21, 'b') : [0.2, 'ariondaz'],
+        (8, 9, 'v') : [0.2, 'praline'],
+        (8, 11, 'b') : [0.6,'granges'],
+        (9, 5, 'v') : [0.8, 'praline'],
+        (9, 10, 'b') : [0.5, 'carabosse'],
+        (10, 11, 'v') : [0.1, 'praline']
         }
