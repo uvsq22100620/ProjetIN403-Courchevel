@@ -279,7 +279,7 @@ successeurs = {
             79 : (80),
             80 : (81),
             81 : (82, 84),
-            82 : (68),
+            82 : (68, 83),
             83 : (61, 82, 84, 107, 108),
             84 : (122),
             85 : (83),
@@ -539,3 +539,72 @@ graphe = {
         (79, 80, 'r') : [0.4, 'combe saulire'],
         (80, 81, 'v') : [0.1, 'verdons']
         }
+
+
+temps_pistes = {
+        'v' : (4.5, 3, 2),
+        'b' : (8, 4, 2),
+        'r' : (12.5, 5, 2),
+        'n' : (24.5, 7, 2)
+        }
+
+temps_remontees = {
+        'temps_moyen_attente' : 5,
+        'tp' : 0.5,
+        'tc' : 1,
+        'ts' : 1.5,
+        'tf' : 2,
+        'rg' : 2,
+        'c' : 3
+        }
+
+
+def calculTemps(sA, sB):
+    ''' Calcule le temps nécessaire au skieur pour aller de sA à sB'''
+
+    global graphe, niveau_skieur, temps_pistes, temps_remontees
+    
+    # On cherche dans le dictionnaire les informations concernant l'arc (sA, sB)
+    for key in graphe.keys():
+        if key[0] == sA and key[1] == sB:
+            arc = (key, graphe[key])
+    
+    type_arc = arc[0][2]        # le type d'un arc est la couleur de la piste ou le type de remontée mécanique
+    longueur_arc = arc[1][0]
+
+    if type_arc in temps_pistes:
+        # s'il s'agit d'une piste, le temps est calculé en fonction de
+        # sa couleur, de sa longueur et du niveau du skieur
+        temps = longueur_arc * temps_pistes[type_arc][niveau_skieur]
+    else:
+        if type_arc == 'c':
+            # s'il s'agit d'un arc de type chemin (à pied), il n'y a pas de temps d'attente
+            temps = longueur_arc * temps_remontees['c']     
+        else:
+            # s'il s'agit d'une remontée mécanique, le temps est calculé en fonction du
+            # temps moyen d'attente, du type de remontée et de sa longueur
+            temps = temps_remontees['temps_moyen_attente'] + (longueur_arc * temps_remontees[type_arc])
+
+    return temps
+
+
+def algoDijkstra(dict_sommets, dict_successeurs, dict_graphe, s_depart, s_arrivee):
+    ''' Fonction réalisant l'algorithme de Dijkstra afin de trouver le plus court 
+        chemin entre les sommets s_depart et s_arrivee dans le graphe représenté
+        dans le dictionnaire dict_graphe'''
+    
+
+    # Création du tableau
+    taille_tableau = len(dict_sommets)
+    tableau = [[0 for i in range(taille_tableau)] for j in range(taille_tableau)]
+
+    # Création des listes
+
+    l_dict_graphe = list(dict_graphe.items())
+    sommets_marques = []        # on ajoutera un par un les sommets dans cette liste une fois qu'ils on été marqués
+
+    # Initialisation du tableau
+
+
+# Quand on demande au skieur son niveau, on stocke le résultat dans niveau_skieur, qui est une variable globale.
+# Il peut être débutant (0), intermédiaire (1) ou bien téméraire (2)
