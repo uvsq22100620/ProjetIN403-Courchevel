@@ -537,7 +537,28 @@ graphe = {
         (78, 79, 'r') : [0.1, 'combe saulire'],
         (78, 122, 'r') : [1.7, 'stade descente'],
         (79, 80, 'r') : [0.4, 'combe saulire'],
-        (80, 81, 'v') : [0.1, 'verdons']
+        (80, 81, 'v') : [0.1, 'verdons'],
+        (81, 82, 'v') : [0.1, 'verdons'],
+        (81, 84, 'v') : [0.2, 'verdons'],
+        (82, 68, 'tp') : [2, 'saulire'],
+        (82, 83, 'v') : [0.1, 'verdons'],
+        (83, 61, 'tc') : [1.9, 'vizelle'],
+        (83, 82, 'v') : [0.1, 'verdons'],
+        (83, 84, 'v') : [0.2, 'verdons'],
+        (83, 107, 'b') : [0.4, 'ryry'],
+        (83, 108, 'v') : [0.6, 'renard'],
+        (84, 122, 'v') : [0.8, 'verdons'],
+        (85, 83, 'b') : [0.3, 'biollay verdons'],
+        (86, 85, 'b') : [0.1, 'biollay verdons'],
+        (86, 89, 'b') : [0.5, 'biollay verdons'],
+        (87, 85, 'n') : [0.5, 'm'],
+        (87, 86, 'n') : [0.4, 'm'],
+        (88, 48, 'b') : [0.8, 'super pralong'],
+        (88, 89, 'b') : [0.1, 'biollay'],
+        (88, 92, 'b') : [0.3, 'pralong'],
+        (89, 90, 'b') : [0.2, 'biollay'],
+        (90, 91, 'b') : [0.4, 'biollay'],
+        (90, 107, 'r') : [0.6, 'marquetty']
         }
 
 
