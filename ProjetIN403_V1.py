@@ -617,20 +617,20 @@ graphe = {
 
 
 temps_pistes = {
-        'v' : (4.5, 3, 2),
-        'b' : (8, 4, 2),
-        'r' : (12.5, 5, 2),
-        'n' : (24.5, 7, 2)
+        'v' : (4.5, 3, 2),      # piste verte
+        'b' : (8, 4, 2),        # piste bleue
+        'r' : (12.5, 5, 2),     # piste rouge
+        'n' : (24.5, 7, 2)      # piste noire
         }
 
 temps_remontees = {
         'temps_moyen_attente' : 5,
-        'tp' : 0.5,
-        'tc' : 1,
-        'ts' : 1.5,
-        'tf' : 2,
-        'rg' : 2,
-        'c' : 3
+        'tp' : 0.5,     # téléphérique
+        'tc' : 1,       # télécabine
+        'ts' : 1.5,     # télésiège
+        'tf' : 2,       # téléski
+        'rg' : 2,       # remontée gratuite
+        'c' : 3         # à pied
         }
 
 niveau_skieur = 0
