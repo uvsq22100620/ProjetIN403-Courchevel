@@ -522,5 +522,20 @@ graphe = {
         (68, 75, 'n') : [1.5, 'grand couloir'],
         (69, 74, 'r') : [0.6, 'combe saulire'],
         (70, 69, 'r') : [0.2, 'combe saulire'],
-        (70, 71, 'r') : [0.1, 'combe saulire']
+        (70, 71, 'r') : [0.1, 'combe saulire'],
+        (71, 72, 'r') : [0.1, 'combe saulire'],
+        (71, 73, 'n') : [0.3, 'combe pylones'],
+        (72, 73, 'r') : [0.4, 'combe saulire'],
+        (72, 87, 'n') : [1.2, 'm'],
+        (73, 74, 'r') : [0.2, 'combe saulire'],
+        (73, 77, 'n') : [1, 'combe pylones'],
+        (74, 75, 'r') : [0.6, 'combe saulire'],
+        (75, 76, 'r') : [0.3, 'combe saulire'],
+        (76, 77, 'r') : [0.3, 'combe saulire'],
+        (76, 78, 'r') : [0.3, 'combe saulire'],
+        (77, 79, 'r') : [0.1, 'combe pylones'],
+        (78, 79, 'r') : [0.1, 'combe saulire'],
+        (78, 122, 'r') : [1.7, 'stade descente'],
+        (79, 80, 'r') : [0.4, 'combe saulire'],
+        (80, 81, 'v') : [0.1, 'verdons']
         }
