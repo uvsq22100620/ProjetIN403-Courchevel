@@ -579,6 +579,8 @@ temps_remontees = {
         'c' : 3
         }
 
+niveau_skieur = 0
+
 
 def calculTemps(sA, sB):
     ''' Calcule le temps nécessaire au skieur pour aller de sA à sB'''
@@ -589,42 +591,59 @@ def calculTemps(sA, sB):
     for key in graphe.keys():
         if key[0] == sA and key[1] == sB:
             arc = (key, graphe[key])
+            type_arc = arc[0][2]        # le type d'un arc est la couleur de la piste ou le type de remontée mécanique
+            longueur_arc = arc[1][0]
     
-    type_arc = arc[0][2]        # le type d'un arc est la couleur de la piste ou le type de remontée mécanique
-    longueur_arc = arc[1][0]
+            if type_arc in temps_pistes:
+                # s'il s'agit d'une piste, le temps est calculé en fonction de
+                # sa couleur, de sa longueur et du niveau du skieur
+                temps = longueur_arc * temps_pistes[type_arc][niveau_skieur]
+            else:
+                if type_arc == 'c':
+                    # s'il s'agit d'un arc de type chemin (à pied), il n'y a pas de temps d'attente
+                    temps = longueur_arc * temps_remontees['c']     
+                else:
+                    # s'il s'agit d'une remontée mécanique, le temps est calculé en fonction du
+                    # temps moyen d'attente, du type de remontée et de sa longueur
+                    temps = temps_remontees['temps_moyen_attente'] + (longueur_arc * temps_remontees[type_arc])
 
-    if type_arc in temps_pistes:
-        # s'il s'agit d'une piste, le temps est calculé en fonction de
-        # sa couleur, de sa longueur et du niveau du skieur
-        temps = longueur_arc * temps_pistes[type_arc][niveau_skieur]
-    else:
-        if type_arc == 'c':
-            # s'il s'agit d'un arc de type chemin (à pied), il n'y a pas de temps d'attente
-            temps = longueur_arc * temps_remontees['c']     
-        else:
-            # s'il s'agit d'une remontée mécanique, le temps est calculé en fonction du
-            # temps moyen d'attente, du type de remontée et de sa longueur
-            temps = temps_remontees['temps_moyen_attente'] + (longueur_arc * temps_remontees[type_arc])
-
-    return temps
+            return temps 
 
 
 def algoDijkstra(dict_sommets, dict_successeurs, dict_graphe, s_depart, s_arrivee):
     ''' Fonction réalisant l'algorithme de Dijkstra afin de trouver le plus court 
         chemin entre les sommets s_depart et s_arrivee dans le graphe représenté
         dans le dictionnaire dict_graphe'''
-    
 
-    # Création du tableau
-    taille_tableau = len(dict_sommets)
-    tableau = [[0 for i in range(taille_tableau)] for j in range(taille_tableau)]
 
     # Création des listes
+    taille_tableau = len(dict_sommets)
+    tableau = [0 for k in range(taille_tableau + 1)]
 
-    l_dict_graphe = list(dict_graphe.items())
-    sommets_marques = []        # on ajoutera un par un les sommets dans cette liste une fois qu'ils on été marqués
+    sommets_marques = [s_depart]        # on ajoutera un par un les sommets dans cette liste une fois qu'ils on été marqués
 
-    # Initialisation du tableau
+    s = s_depart
+    for i in range(taille_tableau):
+        suc = list(dict_successeurs[s])
+        for sommet in suc:
+            nv_temps = calculTemps(s, sommet)
+            #print(tableau[sommet], tableau)
+            if (nv_temps < tableau[sommet]) or (tableau[sommet] == 0):
+                tableau[sommet] = nv_temps
+            #elif:
+                # si égal
+        
+        # Recherche du prochain sommet à traiter
+        l_candidats = []
+        for k in range(len(tableau)):
+            if (tableau[k] != 0) and (k not in sommets_marques):
+                l_candidats.append(tableau[k])
+        s = tableau.index(min(l_candidats))
+        if s not in sommets_marques:
+            sommets_marques.append(s)
+
+        
+    return sommets_marques
 
 
 # Quand on demande au skieur son niveau, on stocke le résultat dans niveau_skieur, qui est une variable globale.
