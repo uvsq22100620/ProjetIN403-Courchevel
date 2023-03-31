@@ -4,6 +4,18 @@
 ## LDDBI
 ######
 
+
+### Import des librairies
+
+import re
+
+### Définition des variables globales
+
+## Définition des dictionnaires
+
+
+# Dictionnaire associant à chaque numéro de sommet un nom
+
 sommets = {
     1 : "R_signal_",
     2 : "P_rochers-grandesbosses_1",
@@ -194,6 +206,9 @@ sommets = {
     187 : "TF_stade_",
     188 : "TD_combe_",
     }
+
+
+# Dictionnaire associant à chaque sommet un tuple de ses successeurs
 
 # on retient qu'il faut proposer les 2 pistes bleues entre 39 et 34 (plan mugnier et mont russes)
 
@@ -388,6 +403,8 @@ successeurs = {
             188 : (26, 29),
             }
 
+# Dictionnaire contenant les données du graphe
+# Rappel : chaque arête est définie par ses 2 sommets, son type, sa longueur et son nom
 
 graphe = {
         (1, 2, 'b') : [0.2, 'grandes bosses'],
@@ -749,12 +766,18 @@ graphe = {
         }
 
 
+# Dictionnaire des temps de descente des pistes en fonction de leur couleur et du niveau du skieur
+# Le 1er élément du tuple correspond au temps pour un skieur de niveau débutant,
+# le 2ème élement pour un skieur de niveau intermédiaire et le dernier pour un skieur téméraire 
+
 temps_pistes = {
         'v' : (4.5, 3, 2),      # piste verte
         'b' : (8, 4, 2),        # piste bleue
         'r' : (12.5, 5, 2),     # piste rouge
         'n' : (24.5, 7, 2)      # piste noire
         }
+
+# Dictionnaire des temps des remontées mécaniques
 
 temps_remontees = {
         'temps_moyen_attente' : 5,
@@ -766,7 +789,13 @@ temps_remontees = {
         'c' : 3         # à pied
         }
 
+
+## Définition des autres variables
+
 niveau_skieur = 0
+
+
+### Fonctions pour trouver le plus court chemin (algorithme de Dijkstra)
 
 
 def calculTemps(sA, sB):
@@ -835,3 +864,22 @@ def algoDijkstra(dict_sommets, dict_successeurs, dict_graphe, s_depart, s_arrive
 
 # Quand on demande au skieur son niveau, on stocke le résultat dans niveau_skieur, qui est une variable globale.
 # Il peut être débutant (0), intermédiaire (1) ou bien téméraire (2)
+
+
+### Fonction pour donner l'itinéraire au skieur
+
+
+def recupNomsFromSommet(nom_s):
+    ''' Récupère le nom de la ou des pistes ou remontées mécaniques
+        à partir du nom du sommet'''
+   
+    while nom_s[0] != '_':     # suppression de la ou des lettres majuscules indiquant le type du sommet:
+        nom_s = nom_s[1:]
+    nom_s = nom_s[1:]
+
+    # Création d'une regex récupérant les noms des pistes ou des remontées :
+    # on veut récupérer ce qui est entouré des caractères '-' et/ou de '_'
+    regex = re.compile("[-_]?([A-Za-z0-9]+)[-_]")
+
+    return regex.findall(nom_s)
+
