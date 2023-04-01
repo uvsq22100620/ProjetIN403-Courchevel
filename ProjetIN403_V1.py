@@ -18,7 +18,7 @@ import re
 
 sommets = {
     1 : "R_signal_",
-    2 : "P_rochers-grandesbosses_1",
+    2 : "P_rochers-grandes.bosses_1",
     3 : "B_rochers_1",
     4 : "B_rochers_2",
     5 : "TD_chapelets_",
@@ -34,78 +34,78 @@ sommets = {
     15 : "V_courchevel-1650_",
     16 : "P_indiens-marquis_1",
     17 : "TF_steagathe_",
-    18 : "P_indiens-pistebleue_1",
-    19 : "TD_3vallees_",
+    18 : "P_indiens-piste.bleue_1",
+    19 : "TD_3.vallees_",
     20 : "TF_marquis_",
-    21 : "TF_3vallees_",
+    21 : "TF_3.vallees_",
     22 : "TF_troika_",
     23 : "R_bosses_",
-    24 : "TF_ptebosse_",
+    24 : "TF_pte.bosse_",
     25 : "B_praline_1",
-    26 : "P_grandesbosses-praline_1",
-    27 : "P_grandesbosses-pyramide_1",
-    28 : "P_grandesbosses-pyramide_2",
+    26 : "P_grandes.bosses-praline_1",
+    27 : "P_grandes.bosses-pyramide_1",
+    28 : "P_grandes.bosses-pyramide_2",
     29 : "TF_combe_",
-    30 : "P_montrusses-grandesbosses_",
-    31 : "TF_rocmugnier_",
+    30 : "P_mont.russes-grandes.bosses_",
+    31 : "TF_roc.mugnier_",
     32 : "TD_pyramide_",
-    33 : "B_rocmugnier_1",
-    34 : "P_montrusses-planmugnier_1",
+    33 : "B_roc.mugnier_1",
+    34 : "P_mont.russes-plan.mugnier_1",
     35 : "B_pyramide_1",
-    36 : "P_montrusses-pyramide_1",
-    37 : "TD_rocmerlet_",
-    38 : "P_montrusses-pyramide_2",
-    39 : "P_montrusses-planmugnier_2",
-    40 : "TF_chanrossa-rocmerlet_",
-    41 : "P_chanrossa-jeanpachod_1",
+    36 : "P_mont.russes-pyramide_1",
+    37 : "TD_roc.merlet_",
+    38 : "P_mont.russes-pyramide_2",
+    39 : "P_mont.russes-plan.mugnier_2",
+    40 : "TF_chanrossa-roc.merlet_",
+    41 : "P_chanrossa-Jean.Pachod_1",
     42 : "TD_chanrossa-marmottes_",
-    43 : "B_rocmugnier_2",
-    44 : "B_rocmugnier_3",
+    43 : "B_roc.mugnier_2",
+    44 : "B_roc.mugnier_3",
     45 : "R_prameruel_",
-    46 : "P_cavedescreux-mur-prameruel_1",
+    46 : "P_cave.des.creux-mur-prameruel_1",
     47 : "P_altiport-mur_1",
     48 : "TD_suisses_",
     49 : "TF_gravelles_",
-    50 : "P_laccreux-parkcity_1",
-    51 : "P_parkcity-rama_1",
-    52 : "P_laccreux-rama_1",
+    50 : "P_lac.creux-park.city_1",
+    51 : "P_park.city-rama_1",
+    52 : "P_lac.creux-rama_1",
     53 : "B_rama_1",
-    54 : "P_laccreux-rama_2",
-    55 : "P_laccreux-parkcity-rama_1",
-    56 : "TD_creuxnoirs_",
-    57 : "P_creux-laccreux_1",
+    54 : "P_lac.creux-rama_2",
+    55 : "P_lac.creux-park.city-rama_1",
+    56 : "TD_creux.noirs_",
+    57 : "P_creux-lac.creux_1",
     58 : "P_rama-suisses-turcs_1",
-    59 : "TF_aiguilledufruit_",
+    59 : "TF_aiguille.du.fruit_",
     60 : "P_suisses-turcs_1",
     61 : "R_vizelle_",
-    62 : "P_creux-rochesgrises_1",
-    63 : "B_rochesgrises_1",
-    64 : "B_rochesgrises_2",
-    65 : "TF_creuxnoirs_",
+    62 : "P_creux-roches.grises_1",
+    63 : "B_roches.grises_1",
+    64 : "B_roches.grises_2",
+    65 : "TF_creux.noirs_",
     66 : "B_rama_2",
     67 : "P_creux-rama_1",
     68 : "TF_saulire_",
-    69 : "B_combesaulire_1",
-    70 : "B_combesaulire_2",
-    71 : "P_combepylones-combesaulire_1",
-    72 : "P_combesaulire-m_1",
-    73 : "P_combepylones-combesaulire_2",
-    74 : "B_combesaulire_3",
-    75 : "P_combesaulire-grandcouloir_1",
-    76 : "B_combesaulire_4",
-    77 : "P_combepylones-combesaulire_3",
-    78 : "TF_rocherdelombre_",
-    79 : "P_combepylones-combesaulire_4",
+    69 : "B_combe.saulire_1",
+    70 : "B_combe.saulire_2",
+    71 : "P_combe.pylones-combe.saulire_1",
+    72 : "P_combe.saulire-m_1",
+    73 : "P_combe.pylones-combe.saulire_2",
+    74 : "B_combe.saulire_3",
+    75 : "P_combe.saulire-grand.couloir_1",
+    76 : "B_combe.saulire_4",
+    77 : "P_combe.pylones-combe.saulire_3",
+    78 : "TF_rocher.de.l'ombre_",
+    79 : "P_combe.pylones-combe.saulire_4",
     80 : "TF_sources_",
     81 : "B_verdons_1",
     82 : "TD_saulire_",
     83 : "R_verdons_",
     84 : "B_verdons_2",
-    85 : "P_biollayverdons-m_1",
-    86 : "P_biollayverdons-m_2",
+    85 : "P_biollay.verdons-m_1",
+    86 : "P_biollay.verdons-m_2",
     87 : "B_m_1",
     88 : "TF_biollay-pralong_",
-    89 : "P_biollay-biollayverdons_1",
+    89 : "P_biollay-biollay.verdons_1",
     90 : "P_biollay-marquetty_1",
     91 : "B_biollay_1",
     92 : "B_pralong_1",
@@ -118,7 +118,7 @@ sommets = {
     99 : "R_pralong_",
     100 : "P_biollay-titi_1",
     101 : "P_biollay-tit_2",
-    102 : "TF_jardinalpin_",
+    102 : "TF_jardin.alpin_",
     103 : "B_titi_1",
     104 : "TF_bellecote_",
     105 : "B_biollay_2",
@@ -128,38 +128,38 @@ sommets = {
     109 : "P_biollay-renard_1",
     110 : "P_renard-titi_1",
     111 : "TD_cospillot_",
-    112 : "T2_jardinalpin_",
+    112 : "T2_jardin.alpin_",
     113 : "B_renard_1",
     114 : "TF_etoiles",
-    115 : "T1_jardinalpin_",
+    115 : "T1_jardin.alpin_",
     116 : "TD_etoiles_",
     117 : "TD_bellecote_",
-    118 : "TD_jardin_alpin_",
+    118 : "TD_jardin.alpin_",
     119 : "R_lac_",
     120 : "P_chenus-verdons_1",
-    121 : "TD_rocherdelombre-sources_",
-    122 : "P_renard-stadedescente-verdons_1",
+    121 : "TD_rocher.de.l'ombre-sources_",
+    122 : "P_renard-stade.descente-verdons_1",
     123 : "P_anemones-chenus-lozeest_1",
     124 : "P_renard-verdons_1",
     125 : "V_courchevel-1850_",
     126 : "TD_loze_",
     127 : "P_lozeest-jantzen_1",
     128 : "P_anemones-jantzen_1",
-    129 : "P_anemones-chenus-lozeest_2",
-    130 : "P_anemones-lacbleu-lozeest_1",
-    131 : "P_lacbleu-lozeest_1",
+    129 : "P_anemones-chenus-loze.est_2",
+    130 : "P_anemones-lac.bleu-loze.est_1",
+    131 : "P_lac.bleu-loze.est_1",
     132 : "B_anemones_1",
     133 : "R_chenus_",
     134 : "TF_cretes_",
     135 : "R_loze_",
-    136 : "TF_boucblanc_",
-    137 : "B_doudumidi_1",
+    136 : "TF_bouc.blanc_",
+    137 : "B_dou.du.midi_1",
     138 : "TF_stade_",
-    139 : "P_maumau-petitdou_1",
+    139 : "P_maumau-petit.dou_1",
     140 : "TD_stade_",
-    141 : "TD_jardindenfants_",
+    141 : "TD_jardin.d'enfants_",
     142 : "P_maumau-proveres_1",
-    143 : "TF_jardindenfants_",
+    143 : "TF_jardin.d'enfants_",
     144 : "B_proveres_1",
     145 : "B_stade_1",
     146 : "P_proveres-stade_1",
@@ -167,42 +167,42 @@ sommets = {
     148 : "TD_roys_",
     149 : "V_courchevel-1550_",
     150 : "TD_tovets_",
-    151 : "P_deviation1550-doudumidi_1",
-    152 : "P_brigues-deviation1550_1",
+    151 : "P_deviation.1550-dou.du.midi_1",
+    152 : "P_brigues-deviation.1550_1",
     153 : "TD_epicea_",
     154 : "TD_plantrey_",
-    155 : "P_doudumidi-maumau_1",
-    156 : "P_doudumidi-maumau_2",
+    155 : "P_dou.du.midi-maumau_1",
+    156 : "P_dou.du.midi-maumau_2",
     157 : "TF_praz_",
-    158 : "P_doudumidi-maumau_3",
+    158 : "P_dou.du.midi-maumau_3",
     159 : "TF_epicea_",
-    160 : "B_doudumidi_2",
-    161 : "P_doudumidi-jeanblanc_1",
+    160 : "B_dou.du.midi_2",
+    161 : "P_dou.du.midi-jean.blanc_1",
     162 : "TD_cretes_",
-    163 : "P_arollesboucblanc-lanches_1",
-    164 : "TF_latania_",
-    165 : "R_prazjuget_",
-    166 : "B_doudeslanches_1",
-    167 : "P_doudeslanches-lanches_1",
-    168 : "B_doudeslanches_2",
-    169 : "P_coldelaloze-doudeslanches_1",
-    170 : "TF_coldelaloze-doudeslanches_",
-    171 : "P_morettablanche-planfontaine_1",
+    163 : "P_arolles-bouc.blanc-lanches_1",
+    164 : "TF_la.tania_",
+    165 : "R_praz.juget_",
+    166 : "B_dou.des.lanches_1",
+    167 : "P_dou.des.lanches-lanches_1",
+    168 : "B_dou.des.lanches_2",
+    169 : "P_col.de.la.loze-dou.des.lanches_1",
+    170 : "TF_col.de.la.loze-dou.des.lanches_",
+    171 : "P_moretta.blanche-plan.fontaine_1",
     172 : "P_jockeys-murettes_1",
-    173 : "P_morettablanche-murettes_1",
-    174 : "TD_boucblanc_",
-    175 : "TF_grosmurger_",
+    173 : "P_moretta.blanche-murettes_1",
+    174 : "TD_bouc.blanc_",
+    175 : "TF_gros.murger_",
     176 : "B_folyeres_1",
-    177 : "P_morettablanche-planfontaine_2",
-    178 : "TD_grosmurger-latania_",
-    179 : "V_latania-1400_",
+    177 : "P_moretta.blanche-plan.fontaine_2",
+    178 : "TD_gros.murger-la.tania_",
+    179 : "V_la-tania-1400_",
     180 : "P_jockeys-murettes_2",
-    181 : "V_courchevellepraz-1300_",
+    181 : "V_courchevel-le-praz-1300_",
     182 : "B_brigues_1",
     183 : "B_brigues_2",
-    184 : "P_brigues-jeanblanc_1",
-    185 : "V_stbon-1100_",
-    186 : "B_jeanblanc_1",
+    184 : "P_brigues-jean.blanc_1",
+    185 : "V_st-bon-1100_",
+    186 : "B_jean.blanc_1",
     187 : "TF_stade_",
     188 : "TD_combe_",
     }
@@ -789,6 +789,21 @@ temps_remontees = {
         'c' : 3         # à pied
         }
 
+# Dictionnaire des abréviations
+
+abreviations = {
+        'v' : 'verte',
+        'b' : 'bleue',
+        'r' : 'rouge',
+        'n' : 'noire',
+        'tp' : 'téléphérique',
+        'tc' : 'télécabine',
+        'ts' : 'télésiège',
+        'tf' : 'téléski',
+        'rg' : 'remontée gratuite',
+        'c' : 'à pied'
+        }
+
 
 ## Définition des autres variables
 
@@ -870,7 +885,7 @@ def algoDijkstra(dict_sommets, dict_successeurs, dict_graphe, s_depart, s_arrive
 
 
 def recupNomsFromSommet(nom_s):
-    ''' Récupère le nom de la ou des pistes ou remontées mécaniques
+    ''' Récupère le nom de la ou des listes ou remontées mécaniques
         à partir du nom du sommet'''
    
     while nom_s[0] != '_':     # suppression de la ou des lettres majuscules indiquant le type du sommet:
@@ -879,7 +894,124 @@ def recupNomsFromSommet(nom_s):
 
     # Création d'une regex récupérant les noms des pistes ou des remontées :
     # on veut récupérer ce qui est entouré des caractères '-' et/ou de '_'
-    regex = re.compile("[-_]?([A-Za-z0-9]+)[-_]")
+    regex = re.compile("[-_]?([A-Za-z0-9\.]+)[-_]")
+    # Séparation des pistes/remontées dans une liste
+    liste_sans_espace = regex.findall(nom_s)
 
-    return regex.findall(nom_s)
+    # Les noms des pistes en plusieurs mots sont séparés par des points (exemple : dou.du.midi)
+    # Il faut donc remplacer ces points par des espaces
+    liste_avec_espace = []
+    for n in liste_sans_espace:
+        piste = ''
+        for l in n:
+            if l == '.':
+                piste += ' '
+            else:
+                piste += l
+        liste_avec_espace.append(piste)
 
+    return liste_avec_espace
+
+
+def recupTypeFromNom(nom_piste_ou_remontee, p_r):
+    ''' Récupère le type d'une piste ou d'une remontée
+        Exemple : verte, rouge, télécabine, téléski, ...
+        Attention, un même nom peut être porté à la fois par un télésiège, une piste
+        verte et une bleue par exemple.
+        L'argument p_r précise si l'on cherche le nom d'une piste ou d'une remontée ('p' ou 'r')'''
+    
+    global graphe, abreviations, temps_pistes, temps_remontees
+    
+    aretes = graphe.items()
+    t = []
+    for a in aretes:        # on parcourt chaque arête du graphe
+        if a[1][1] == nom_piste_ou_remontee:        # si le nom de l'arête est celui que l'on cherche
+            type_a = a[0][2]
+            if type_a not in t:                     # et qu'on ne l'a pas encore ajouté à la liste t,
+                t.append(type_a)                    # on l'ajoute
+
+    # Suppression des pistes si on cherche un type de remontée mécanique
+    if p_r == 'r':
+        for k in t:
+            if k not in temps_remontees:
+                t.remove(k)
+    # Suppression des remontées si on cherche une couleur de piste
+    else:
+        for k in t:
+            if k not in temps_pistes:
+                t.remove(k)
+
+    # Remplacement des abréviations            
+    for k in range(len(t)):
+        t[k] = abreviations[t[k]]
+
+    return t
+
+
+def descriptionSommet(s):
+    ''' Retourne une description du sommet s pour que le skieur comprenne où il doit aller.
+        Par exemple, le sommet 5 (TD_chapelets) sera décrit comme "le début du télésiege chapelets" '''
+    
+    global sommets #graphe
+    
+    nom_s = sommets[s]          # on récupère le nom du sommet
+    type_s = nom_s[0]           # le type du sommet est sa lettre majuscule (1er caractère)
+    description_s = ''
+    nb = ('0', '1', '2', '3', '4', '5', '6', '7', '8', '9')
+
+    # Remontée mécanique
+    if type_s == 'T':
+        noms = recupNomsFromSommet(nom_s)
+        types_remontee = []
+        for n in noms:
+            types_remontee.append(recupTypeFromNom(n, 'r'))
+        debut_fin = nom_s[1]
+        print(noms)
+        print(types_remontee)
+        if debut_fin == 'D':      # si le sommet est le début d'une remontée mécanique
+            description_s += 'le début du '
+            for k in range(len(noms)):
+                description_s += str(types_remontee[k]) + str(noms[k])
+        elif debut_fin == 'F':     # si le sommet est la fin d'une remontée
+            description_s += 'la fin du '
+        else:                    # s'il s'agit d'un arrêt du télécabine jardin alpin
+                                    # (c'est le seul à avoir plusieurs arrêts)            
+            description_s += "l'arrêt " + debut_fin + " du télécabine jardin alpin"
+
+    # Intersection entre plusieurs pistes
+    elif type_s == 'P':       
+        description_s += "l'intersection entre les pistes "
+        pistes = recupNomsFromSommet(nom_s)
+        nb_pistes = len(pistes)
+        for p in range(nb_pistes):
+            print(pistes(p))
+            description_s += str(pistes(p))
+            if p == (nb_pistes - 1) :
+                description_s += ' et '
+            else :
+                description_s += ', '
+            #description_s += pistes(p)
+
+    # Bifurcation d'une piste    
+    elif type_s == 'B':       
+        description_s += 'la bifurcation de la piste ' + recupNomsFromSommet(nom_s)[0]
+
+    # Point de rencontre
+    elif type_s == 'R':       
+        description_s += 'le point de rencontre '
+        pt = recupNomsFromSommet(nom_s)[0]
+        description_s += pt[0].upper() + pt[1:]
+
+    # Village
+    elif type_s == 'V':
+        description_s += 'le village de '
+        village = recupNomsFromSommet(nom_s)
+        for v in village:
+            if v[0] not in nb:
+                description_s += v[0].upper() + v[1:]
+                description_s += " "
+            else :
+                description_s += v
+
+
+    return description_s
