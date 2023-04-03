@@ -223,7 +223,7 @@ successeurs = {
             8 : (9, 11),
             9 : (5, 10),
             10 : (11),
-            11 : (13, 187),
+            11 : (7, 13, 187),
             12 : (11, 13),
             13 : (15),
             14 : (15),
@@ -328,7 +328,7 @@ successeurs = {
             113 : (112, 119),
             114 : (116),
             115 : (112, 116),
-            116 : (114, 124),
+            116 : (114, 115, 124),
             117 : (104, 118),
             118 : (117, 115, 125),
             119 : (88, 133),
@@ -429,6 +429,7 @@ graphe = {
         (9, 5, 'v') : [0.8, 'praline'],
         (9, 10, 'b') : [0.5, 'carabosse'],
         (10, 11, 'v') : [0.1, 'praline'],
+        (11, 7, 'ts') : [1, 'granges'],
         (11, 13, 'v') : [0.5, 'praline'],
         (11, 187, 'tf') : [0.5, 'stade'],
         (12, 11, 'v') : [0.5, 'belvédère'],
@@ -589,11 +590,11 @@ graphe = {
         (96, 97, 'c') : [0.4, 'zen'],
         (97, 95, 'tf') : [0.8, 'altiport'],
         (97, 96, 'tf') : [0.4, 'ferme'],
-        (97, 98, 'c') : [0.2, 'chemin'],
-        (98, 97, 'c') : [0.2, 'chemin'],
-        (98, 99, 'c') : [0.1, 'chemin'],
+        (97, 98, 'c') : [0.2, 'chemin de pralong'],
+        (98, 97, 'c') : [0.2, 'chemin de pralong'],
+        (98, 99, 'c') : [0.1, 'chemin de pralong'],
         (99, 88, 'ts') : [2, 'pralong'],
-        (99, 98, 'c') : [0.1, 'chemin'],
+        (99, 98, 'c') : [0.1, 'chemin de pralong'],
         (100, 99, 'v') : [0.3, "titi"],
         (101, 100, 'b') : [0.3, 'biollay'],
         (101, 104, 'v') : [0.3, 'titi'],
@@ -620,14 +621,15 @@ graphe = {
         (113, 119, 'v') : [0.3, 'renard'],
         (114, 116, 'v') : [0.3, 'renard'],
         (115, 112, 'tc') : [0.3, 'jardin alpin'],
-        (115, 116, 'c') : [0.1, 'chemin'],
+        (115, 116, 'c') : [0.1, 'chemin du lac'],
         (116, 114, 'rg') : [0.3, 'etoiles'],
+        (116, 115, 'c') : [0.1, 'chemin du lac'],
         (116, 124, 'v') : [0.8, 'renard'],
         (117, 104, 'rg') : [1.6, 'bellecote'],
-        (117, 118, 'c') : [0.2, 'chemin'],
-        (118, 117, 'c') : [0.2, 'chemin'],
+        (117, 118, 'c') : [0.2, 'chemin de la forêt'],
+        (118, 117, 'c') : [0.2, 'chemin de la forêt'],
         (118, 115, 'tc') : [0.7, 'jardin alpin'],
-        (118, 125, 'c') : [0.1, 'chemin'],
+        (118, 125, 'c') : [0.1, 'chemin des étables'],
         (119, 88, 'ts') : [2.1, 'biollay'],
         (119, 133, 'ts') : [2, 'coqs'],
         (120, 124, 'v') : [0.5, 'verdons'],
@@ -640,12 +642,12 @@ graphe = {
         (123, 127, 'b') : [0.5, 'loze est'],
         (124, 125, 'v') : [0.4, 'verdons'],
         (125, 83, 'tc') : [2, 'verdons'],
-        (125, 118, 'c') : [0.1, 'chemin'],
-        (125, 126, 'c') : [0.1, 'chemin'],
+        (125, 118, 'c') : [0.1, 'chemin des étables'],
+        (125, 126, 'c') : [0.1, 'chemin du stade'],
         (125, 133, 'tc') : [2.2, 'chenus'],
-        (125, 141, 'c') : [0.1, 'chemin'],
+        (125, 141, 'c') : [0.1, 'chemin des jardins'],
         (125, 142, 'b') : [0.1, 'proveres'],
-        (126, 125, 'c') : [0.1, 'chemin'],
+        (126, 125, 'c') : [0.1, 'chemin du stade'],
         (126, 135, 'ts') : [1.6, 'loze'],
         (127, 126, 'b') : [0.2, 'loze est'],
         (128, 123, 'b') : [0.5, 'anémones'],
@@ -678,7 +680,7 @@ graphe = {
         (140, 125, 'v') : [0.4, 'maumau'],
         (140, 138, 'ts') : [1, 'stade'],
         (140, 156, 'b') : [0.8, 'maumau'],
-        (141, 125, 'c') : [0.1, 'chemin'],
+        (141, 125, 'c') : [0.1, 'chemin des jardins'],
         (142, 144, 'b') : [0.2, 'proveres'],
         (142, 155, 'v') : [0.8, 'maumau'],
         (143, 141, 'ts') : [0.6, "jardin d'enfants"],
@@ -922,10 +924,10 @@ def recupTypeFromNom(nom_piste_ou_remontee, p_r):
     
     global graphe, abreviations, temps_pistes, temps_remontees
     
-    aretes = graphe.items()
+    arcs = graphe.items()
     t = []
-    for a in aretes:        # on parcourt chaque arête du graphe
-        if a[1][1] == nom_piste_ou_remontee:        # si le nom de l'arête est celui que l'on cherche
+    for a in arcs:        # on parcourt chaque arc du graphe
+        if a[1][1] == nom_piste_ou_remontee:        # si le nom de l'arc est celui que l'on cherche
             type_a = a[0][2]
             if type_a not in t:                     # et qu'on ne l'a pas encore ajouté à la liste t,
                 t.append(type_a)                    # on l'ajoute
