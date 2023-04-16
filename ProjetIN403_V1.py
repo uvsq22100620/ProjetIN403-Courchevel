@@ -29,7 +29,7 @@ sommets = {
     10 : "P_carabosse-praline_2",
     11 : "TD_granges-stade_",
     12 : "TF_belvedere_",
-    13 : "B_belvedere_1",
+    13 : "P_belvedere-praline_1",
     14 : "TF_mickey_",
     15 : "V_courchevel-1650_",
     16 : "P_indiens-marquis_1",
@@ -950,6 +950,78 @@ def recupTypeFromNom(nom_piste_ou_remontee, p_r):
     return t
 
 
+def recupNomFromArc(sA, sB, type_arc):
+    ''' Récupère le nom d'un arc à partir des numéros
+        des sommets de l'arc en question (et son type)'''
+    # Cette fonction est utilisée dans la fonction itineraire
+    
+    global graphe
+
+    arcs = graphe.items()
+    for a in arcs:      # on parcourt chaque arc du graphe
+        if (a[0][0] == sA) and (a[0][1] == sB) and (a[0][2] == type_arc):         # s'il s'agit d'un arc (sA, sB)
+            return a[1][1]                   # on renvoie son nom
+    return 'pas trouvé'     #### A ENLEVER A LA FIN
+
+
+def descriptionT(nom_s):
+    ''' Décrit les sommets en lien avec une remontée mécanique.
+        Cette fonction traite un des types de sommets possibles dans la fonction descriptionSommet'''
+
+    description_s = ''
+    noms = recupNomsFromSommet(nom_s)       # on récupère une liste des noms des remontées
+    types_remontees = []
+
+    for n in range(len(noms)):
+        types_remontees.append(recupTypeFromNom(noms[n], 'r')[0])
+    debut_fin = nom_s[1]
+
+    if debut_fin == 'D':      # si le sommet est le début d'une remontée mécanique
+        description_s += 'au début du '
+        for k in range(len(noms)):
+            if (k == (len(noms)-1)) and (k != 0):
+                description_s += ' et du '
+            elif k != 0:
+                description_s += ', '
+            description_s += str(types_remontees[k]) + ' ' + str(noms[k])
+
+    elif debut_fin == 'F':     # si le sommet est la fin d'une remontée
+        description_s += 'à la fin du '
+        for k in range(len(noms)):
+            if (k == (len(noms)-1)) and (k != 0):
+                description_s += ' et du '
+            elif k != 0:
+                description_s += ', '
+            description_s += str(types_remontees[k]) + ' ' + str(noms[k])
+            
+    else:                    # s'il s'agit d'un arrêt du télécabine jardin alpin
+                                    # (c'est le seul à avoir plusieurs arrêts)            
+        description_s += "à l'arrêt " + debut_fin + " du télécabine jardin alpin"
+
+    return description_s
+
+
+def descriptionP(nom_s):
+    ''' Décrit les sommets des intersections entre plusieurs pistes.
+        Cette fonction traite un des types de sommets possibles dans la fonction descriptionSommet'''
+
+    description_s = ''
+    description_s += "à l'intersection entre la piste "
+    pistes = recupNomsFromSommet(nom_s)
+    types_pistes = []
+    for n in range(len(pistes)):
+        types_pistes.append(recupTypeFromNom(pistes[n], 'p')[0])
+    for k in range(len(pistes)):
+        if (k == (len(pistes)-1)) and (k != 0):
+            description_s += ' et la piste '
+        elif k != 0:
+            description_s += ', la piste '
+        description_s += str(types_pistes[k]) + ' ' + str(pistes[k])
+
+    return description_s
+
+
+
 def descriptionSommet(s):
     ''' Retourne une description du sommet s pour que le skieur comprenne où il doit aller.
         Par exemple, le sommet 5 (TD_chapelets) sera décrit comme "le début du télésiege chapelets" '''
@@ -963,50 +1035,25 @@ def descriptionSommet(s):
 
     # Remontée mécanique
     if type_s == 'T':
-        noms = recupNomsFromSommet(nom_s)
-        types_remontee = []
-        for n in noms:
-            types_remontee.append(recupTypeFromNom(n, 'r'))
-        debut_fin = nom_s[1]
-        print(noms)
-        print(types_remontee)
-        if debut_fin == 'D':      # si le sommet est le début d'une remontée mécanique
-            description_s += 'le début du '
-            for k in range(len(noms)):
-                description_s += str(types_remontee[k]) + str(noms[k])
-        elif debut_fin == 'F':     # si le sommet est la fin d'une remontée
-            description_s += 'la fin du '
-        else:                    # s'il s'agit d'un arrêt du télécabine jardin alpin
-                                    # (c'est le seul à avoir plusieurs arrêts)            
-            description_s += "l'arrêt " + debut_fin + " du télécabine jardin alpin"
+        description_s = descriptionT(nom_s)
 
     # Intersection entre plusieurs pistes
     elif type_s == 'P':       
-        description_s += "l'intersection entre les pistes "
-        pistes = recupNomsFromSommet(nom_s)
-        nb_pistes = len(pistes)
-        for p in range(nb_pistes):
-            print(pistes(p))
-            description_s += str(pistes(p))
-            if p == (nb_pistes - 1) :
-                description_s += ' et '
-            else :
-                description_s += ', '
-            #description_s += pistes(p)
+        description_s = descriptionP(nom_s)
 
     # Bifurcation d'une piste    
     elif type_s == 'B':       
-        description_s += 'la bifurcation de la piste ' + recupNomsFromSommet(nom_s)[0]
+        description_s += 'à la bifurcation de la piste ' + recupNomsFromSommet(nom_s)[0]
 
     # Point de rencontre
     elif type_s == 'R':       
-        description_s += 'le point de rencontre '
+        description_s += 'au point de rencontre '
         pt = recupNomsFromSommet(nom_s)[0]
         description_s += pt[0].upper() + pt[1:]
 
     # Village
     elif type_s == 'V':
-        description_s += 'le village de '
+        description_s += 'au village de '
         village = recupNomsFromSommet(nom_s)
         for v in village:
             if v[0] not in nb:
@@ -1017,3 +1064,44 @@ def descriptionSommet(s):
 
 
     return description_s
+
+
+def itineraire(l_sommets):
+    ''' Cette fonction prend en argument la liste des sommets correspondant
+    au plus court chemin trouvé par l'algorithme de Dijkstra,
+    puis elle retourne les indications sur l'itinéraire à suivre '''
+
+    global temps_pistes, abreviations
+
+    historique = []
+    
+    if l_sommets == []:
+        iti = 'Erreur : liste vide'
+    
+    iti = 'Vous vous trouvez actuellement ' + descriptionSommet(l_sommets[0]) + '\n'
+    
+    for s in range(0, len(l_sommets)-1, 2):
+        sA = l_sommets[s]
+        sB = l_sommets[s+2]
+        type_a = l_sommets[s+1]
+        #print('sA ', sA)
+        #print('sB ', sB)
+        #print('type ', type_a)
+        historique.append((type_a, recupNomFromArc(sA, sB, type_a), sB))
+    print(historique)
+    for a in range(len(historique)):
+        if (a == 0) or ((historique[a][0] != historique[a-1][0]) and (historique[a][1] != historique[a-1][1])):
+            type_arc = historique[a][0]
+            if type_arc in temps_pistes:
+                iti += 'Descendez la piste ' + str(abreviations[type_arc]) + ' ' + historique[a][1]
+                iti += " jusqu'" + descriptionSommet(historique[a][2]) + '\n'
+            elif type_arc == 'c':
+                iti += 'Prenez le ' + historique[a][1] + '\n'
+            elif type_arc == 'rg':
+                iti += 'Prenez la remontée gratuite ' + historique[a][1] + '\n'
+            else:
+                iti += 'Prenez le ' + str(abreviations[type_arc]) + ' ' + historique[a][1] + '\n'
+
+    iti += 'Vous êtes arrivés ' + descriptionSommet(l_sommets[len(l_sommets)-1])
+
+    return iti
