@@ -1307,6 +1307,27 @@ CS = [(),
 (166, 309, 176, 319),]
 
 
+## Définition des fonctions utilisées pour l'interface graphique
+
+def recupNumSommetClique(event):
+    ''' Cette fonction récupère les coordonnées de l'endroit où l'utilisateur a cliqué,
+        puis elle compare ces coordonnées à celles des différents sommets.
+        Elle renvoie le numéro du sommet correspondant, ou rien si aucun sommet n'a été cliqué'''
+    
+    global CS
+
+    x = event.x
+    y = event.y
+    for s in range(1, 189):     # on parcourt les coordonnées de chaque sommet
+        x1 = CS[s][0]
+        y1 = CS[s][1]
+        x2 = CS[s][2]
+        y2 = CS[s][3]
+        if (x1<=x) and (x<=x2) and (y1<=y) and (y<=y2):
+            return s       
+    return
+
+
 fenetre = tk.Tk()
 fenetre.title("Tout schuss à Courch !")
 
