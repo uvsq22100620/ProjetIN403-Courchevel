@@ -1338,4 +1338,9 @@ canvas = tk.Canvas(fenetre, width=img.width(), height=img.height())
 canvas.create_image(0, 0, anchor='nw', image=img)
 canvas.pack()
 
+for s in range(1, 189):
+    canvas.create_oval(CS[s][0], CS[s][1], CS[s][2], CS[s][3], fill='black')
+
+canvas.bind("<Button-1>", recupNumSommetClique)
+
 fenetre.mainloop()
