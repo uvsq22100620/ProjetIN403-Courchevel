@@ -847,41 +847,85 @@ def calculTemps(sA, sB):
             return temps 
 
 
-def algoDijkstra(dict_sommets, dict_successeurs, dict_graphe, s_depart, s_arrivee):
-    ''' Fonction réalisant l'algorithme de Dijkstra afin de trouver le plus court 
-        chemin entre les sommets s_depart et s_arrivee dans le graphe représenté
-        dans le dictionnaire dict_graphe'''
+def algoDijkstra(dict_successeurs, s_depart, s_arrivee):
+    ''' Fonction realisant l'algorithme de Dijkstra afin de trouver le plus court
+        chemin entre les sommets s_depart et s_arrivee dans le graphe represente
+        dans un dictionnaire'''
 
+    infini = 2**30
+    nb_sommets = len(dict_successeurs)
 
-    # Création des listes
-    taille_tableau = len(dict_sommets)
-    tableau = [0 for k in range(taille_tableau + 1)]
+    #Creation d'un dictionnaire pour stocker pour chaque sommet un tuple 
+    #contenant le sommet pere et la distance jusqu'au sommet depuis le sommet de depart
+    distances = {sommet: (None, infini) for sommet in range(1, nb_sommets+1)}
+    distances[s_depart] = 0
 
-    sommets_marques = [s_depart]        # on ajoutera un par un les sommets dans cette liste une fois qu'ils on été marqués
+    sommets_marques = [0]
 
-    s = s_depart
-    for i in range(taille_tableau):
-        suc = list(dict_successeurs[s])
-        for sommet in suc:
-            nv_temps = calculTemps(s, sommet)
-            #print(tableau[sommet], tableau)
-            if (nv_temps < tableau[sommet]) or (tableau[sommet] == 0):
-                tableau[sommet] = nv_temps
-            #elif:
-                # si égal
-        
-        # Recherche du prochain sommet à traiter
-        l_candidats = []
-        for k in range(len(tableau)):
-            if (tableau[k] != 0) and (k not in sommets_marques):
-                l_candidats.append(tableau[k])
-        s = tableau.index(min(l_candidats))
-        if s not in sommets_marques:
-            sommets_marques.append(s)
+    s_traitement = s_depart
+    somme = 2
 
-        
-    return sommets_marques
+    while len(sommets_marques) < nb_sommets :   #Tant qu'on n'a pas marque tous les sommets
+        sommets_marques.append(s_traitement)    #Ajoute le sommet en cours de traitement aux sommets marques
 
+        if type(dict_successeurs[s_traitement]) == int:     #Regarde si le type est un int pour le cas ou il n'y a qu'un successeur
+            suc = [dict_successeurs[s_traitement]]
+        else:                                               #Sinon on recupere le tuple des successeurs
+            suc = dict_successeurs[s_traitement]
+
+        for sommet in suc :                                 #Parcours les successeurs pour calculer le nouveau temps
+            temps = calculTemps(s_traitement, sommet)
+            if sommet not in sommets_marques:
+                d = distances[sommet][1]                    #Recupere la distance jusqu'au sommet
+                if somme + temps < d:                       #pour la comparer au nouveau temps calcule
+                    distances[sommet] = (s_traitement, somme + temps)
+
+        # Recherche du prochain sommet a traiter parmi les sommets non marques
+        minimum = (None, infini)
+        for sommet in range(1, nb_sommets+1):
+            #Recherche du minimum pour trouver le prochain sommet a traiter
+            if sommet not in sommets_marques and distances[sommet][1] <= minimum[1]:
+                minimum = (sommet, distances[sommet][1])
+
+        s_traitement, somme = minimum
+
+    #Reconstruction du chemin de s_depart jusqu'a s_arrivee
+    sommet = s_arrivee
+    parcours = [s_arrivee]
+    longueur = distances[s_arrivee][1]
+
+    while sommet != s_depart:           #Remonte le graphe depuis le dernier sommet pour obtenir le plus court chemin
+        sommet = distances[sommet][0]
+        parcours.append(sommet)
+
+    parcours.reverse()      #Inverse l'ordre pour avoir le chemin dans le bon sens
+
+    return parcours, longueur
+
+def ajout_type(parcours, dict_graph=graphe):
+    '''Fonction permettant d'ajouter dans le parcours le type de piste et de remontee a partir d'un parcours de PCC'''
+    
+    parcours_and_type = []
+
+    for i in range(0, len(parcours[0])):
+        if i+1 < len(parcours[0]):
+            li = [parcours[0][i], type_arete(dict_graph, parcours[0][i], parcours[0][i+1])]
+            parcours_and_type.extend(li)
+
+    parcours_and_type.append(parcours[0][-1])
+
+    return parcours_and_type, parcours[1]
+
+def type_arete(dico, s1, s2):
+    '''Fonction permettant de renvoyer le(s) type(s) d'arete entre un sommet s1 et s2'''
+
+    li_keys = [keys for keys in dico.keys() if keys[0] == s1 and keys[1] == s2]
+
+    li_type = []
+    for elt in li_keys :
+        li_type.append(elt[2])
+
+    return li_type
 
 # Quand on demande au skieur son niveau, on stocke le résultat dans niveau_skieur, qui est une variable globale.
 # Il peut être débutant (0), intermédiaire (1) ou bien téméraire (2)
