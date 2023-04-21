@@ -814,6 +814,7 @@ abreviations = {
 ## Définition des autres variables
 
 niveau_skieur = 0
+sommets_selec = [0,0]
 
 
 ### Fonctions pour trouver le plus court chemin (algorithme de Dijkstra)
@@ -1356,35 +1357,114 @@ CS = [(),
 def recupNumSommetClique(event):
     ''' Cette fonction récupère les coordonnées de l'endroit où l'utilisateur a cliqué,
         puis elle compare ces coordonnées à celles des différents sommets.
-        Elle renvoie le numéro du sommet correspondant, ou rien si aucun sommet n'a été cliqué'''
+        Elle renvoie le numéro du sommet correspondant, ou rien si aucun sommet n'a été cliqué
+        Elle permet aussi de changer la couleur des sommets sélectionnés '''
     
-    global CS
+    global CS, sommets_selec
 
-    x = event.x
-    y = event.y
-    for s in range(1, 189):     # on parcourt les coordonnées de chaque sommet
-        x1 = CS[s][0]
-        y1 = CS[s][1]
-        x2 = CS[s][2]
-        y2 = CS[s][3]
-        if (x1<=x) and (x<=x2) and (y1<=y) and (y<=y2):
-            return s       
-    return
+    if (sommets_selec[0] == 0) or (sommets_selec[1] == 0):    # si les 2 sommets n'ont pas encore été sélectionnés
+        x = event.x
+        y = event.y
+        for s in range(1, 189):     # on parcourt les coordonnées de chaque sommet
+            x1 = CS[s][0]
+            y1 = CS[s][1]
+            x2 = CS[s][2]
+            y2 = CS[s][3]
+            if (x1<=x) and (x<=x2) and (y1<=y) and (y<=y2):
+                canvas.create_oval(x1, y1, x2, y2, fill='red')
+                if sommets_selec[0] != 0:
+                    sommets_selec[1] = s
+                else:
+                    sommets_selec[0] = s
+    return sommets_selec
 
 
-fenetre = tk.Tk()
-fenetre.title("Tout schuss à Courch !")
+def annulerSommetSelec(event):
+    ''' Annule la sélection d'un sommet '''
 
-plan_station = Image.open("plan_station2.png")
+    global CS, sommets_selec
 
-img = ImageTk.PhotoImage(plan_station)
-canvas = tk.Canvas(fenetre, width=img.width(), height=img.height())
-canvas.create_image(0, 0, anchor='nw', image=img)
-canvas.pack()
+    if sommets_selec != [0,0]:
+        x = event.x
+        y = event.y
+        for s in range(1, 189):     # on parcourt les coordonnées de chaque sommet
+            x1 = CS[s][0]
+            y1 = CS[s][1]
+            x2 = CS[s][2]
+            y2 = CS[s][3]
+            if (x1<=x) and (x<=x2) and (y1<=y) and (y<=y2) and s in sommets_selec:
+                canvas.create_oval(x1, y1, x2, y2, fill='black')
+                sommets_selec.remove(s)
+                sommets_selec.append(0)
+    return sommets_selec
 
-for s in range(1, 189):
-    canvas.create_oval(CS[s][0], CS[s][1], CS[s][2], CS[s][3], fill='black')
 
-canvas.bind("<Button-1>", recupNumSommetClique)
+def nivDeb():
+    ''' Met à jour la variable globale niveau_skieur en fonction du bouton cliqué.
+        Ici elle prend la valeur 1 (niveau débutant) '''
+    global niveau_skieur
+    niveau_skieur = 1
+    w_accueil.destroy()
 
-fenetre.mainloop()
+def nivInt():
+    ''' Met à jour la variable globale niveau_skieur en fonction du bouton cliqué.
+        Ici elle prend la valeur 2 (niveau intermédiaire) '''
+    global niveau_skieur
+    niveau_skieur = 2
+    w_accueil.destroy()
+
+def nivTem():
+    ''' Met à jour la variable globale niveau_skieur en fonction du bouton cliqué.
+        Ici elle prend la valeur 3 (niveau téméraire) '''
+    global niveau_skieur
+    niveau_skieur = 3
+    w_accueil.destroy()
+
+
+def suppAcc():
+    ''' Supprime la fenêtre d'accueil'''
+    #can.delete(image_id)
+    can.delete("all")
+    demande_niveau = tk.Label(w_accueil, text="Quel-est votre niveau ?", font=("helvetica", "30"))
+    debutant = tk.Button(w_accueil, text="Débutant", font=("helvetica", "25"), command=nivDeb)
+    intermediaire = tk.Button(w_accueil, text="Intermédiaire", font=("helvetica", "25"), command=nivInt)
+    temeraire = tk.Button(w_accueil, text="Téméraire", font=("helvetica", "25"), command=nivTem)
+
+    demande_niveau.grid(row=0, column=0, columnspan=4)
+    debutant.grid(row=1, column=0)
+    intermediaire.grid(row=1, column=1)
+    temeraire.grid(row=1, column=2)
+
+
+w_accueil = tk.Tk()
+w_accueil.title("Tout schuss à Courch !")
+
+accueil_courch = Image.open("bienvenue_courchevel.png")
+img = ImageTk.PhotoImage(accueil_courch)
+can = tk.Canvas(w_accueil, width=img.width(), height=img.height())
+image_id = can.create_image(0, 0, anchor='nw', image=img)
+can.grid(row=0, column=0, rowspan=8, columnspan=8)
+w_accueil.after(2000, suppAcc)
+
+w_accueil.mainloop()
+
+if niveau_skieur != 0:
+    fenetre = tk.Tk()
+    fenetre.title("Tout schuss à Courch !")
+
+    plan_station = Image.open("plan_station2.png")
+
+    img = ImageTk.PhotoImage(plan_station)
+    canvas = tk.Canvas(fenetre, width=img.width(), height=img.height())
+    canvas.create_image(0, 0, anchor='nw', image=img)
+    canvas.pack()
+
+    # Création des widgets correspondant aux sommets
+
+    for s in range(1, 189):
+        canvas.create_oval(CS[s][0], CS[s][1], CS[s][2], CS[s][3], fill='black')
+
+    canvas.bind("<Button-1>", recupNumSommetClique)
+    canvas.bind("<Button-3>", annulerSommetSelec)
+
+    fenetre.mainloop()
