@@ -1461,6 +1461,32 @@ def suppAcc():
     temeraire.grid(row=1, column=2)
 
 
+def retourNiveaux():
+    ''' Permet de revenir au choix du niveau '''
+    pass
+
+
+def clignoterItineraire(iti):
+    ''' Fais clignoter les sommets de l'itinéraire à emprunter '''
+    pass
+
+
+def validerSommets():
+    ''' '''
+
+    global sommets_selec
+    sA = sommets_selec[0]
+    sB = sommets_selec[1]
+
+    if (sA != 0) and (sB != 0):
+        label_iti['text'] = ""
+        iti = algoDijkstra(sA, sB)
+        clignoterItineraire(iti)
+        label_iti['text'] = itineraire(iti)
+    else:
+        label_iti['text'] = "Veuillez sélectionner 2 sommets"
+
+
 w_accueil = tk.Tk()
 w_accueil.title("Tout schuss à Courch !")
 
@@ -1491,5 +1517,14 @@ if niveau_skieur != 0:
 
     canvas.bind("<Button-1>", recupNumSommetClique)
     canvas.bind("<Button-3>", annulerSommetSelec)
+
+    retour = tk.Button(fenetre, text="Retour", font=("helvetica", "15"), command=retourNiveaux)
+    retour.grid(column=11, row=10)
+
+    valider = tk.Button(fenetre, text="Valider", font=("helvetica", "15"), command=validerSommets)
+    valider.grid(column=10, row=10)
+
+    label_iti = tk.Label(fenetre, text="", font=("helvetica", "12"))
+    label_iti.grid(column=9, columnspan=4, row=0, rowspan=2)
 
     fenetre.mainloop()
