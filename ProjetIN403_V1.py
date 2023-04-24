@@ -848,13 +848,15 @@ def calculTemps(sA, sB):
             return temps 
 
 
-def algoDijkstra(dict_successeurs, s_depart, s_arrivee):
+def algoDijkstra(s_depart, s_arrivee):
     ''' Fonction realisant l'algorithme de Dijkstra afin de trouver le plus court
         chemin entre les sommets s_depart et s_arrivee dans le graphe represente
         dans un dictionnaire'''
 
+    global successeurs
+
     infini = 2**30
-    nb_sommets = len(dict_successeurs)
+    nb_sommets = len(successeurs)
 
     #Creation d'un dictionnaire pour stocker pour chaque sommet un tuple 
     #contenant le sommet pere et la distance jusqu'au sommet depuis le sommet de depart
@@ -869,10 +871,10 @@ def algoDijkstra(dict_successeurs, s_depart, s_arrivee):
     while len(sommets_marques) < nb_sommets :   #Tant qu'on n'a pas marque tous les sommets
         sommets_marques.append(s_traitement)    #Ajoute le sommet en cours de traitement aux sommets marques
 
-        if type(dict_successeurs[s_traitement]) == int:     #Regarde si le type est un int pour le cas ou il n'y a qu'un successeur
-            suc = [dict_successeurs[s_traitement]]
+        if type(successeurs[s_traitement]) == int:     #Regarde si le type est un int pour le cas ou il n'y a qu'un successeur
+            suc = [successeurs[s_traitement]]
         else:                                               #Sinon on recupere le tuple des successeurs
-            suc = dict_successeurs[s_traitement]
+            suc = successeurs[s_traitement]
 
         for sommet in suc :                                 #Parcours les successeurs pour calculer le nouveau temps
             temps = calculTemps(s_traitement, sommet)
@@ -1115,6 +1117,29 @@ def descriptionSommet(s):
     return description_s
 
 
+def affichageTempsIti(tps_en_minutes):
+    ''' Retourne la phrase décrviant le temps nécessaire pour suivre l'itinéraire'''
+
+    nb_heures = tps_en_minutes // 60
+    nb_minutes = tps_en_minutes % 60
+    res = "Pour cet itinéraire, il vous faudra "
+
+    if nb_heures != 0:
+        if nb_heures == 1:
+            res += "1 heure"
+        else:
+            res += str(nb_heures) + " heures"
+        if nb_minutes != 0:
+            res += " et "
+    if nb_minutes != 0:
+        if nb_minutes == 1:
+            res += "1 minute"
+        else:
+            res += str(nb_minutes) + " minutes"
+    
+    return res
+
+
 def itineraire(l_sommets):
     ''' Cette fonction prend en argument la liste des sommets correspondant
     au plus court chemin trouvé par l'algorithme de Dijkstra,
@@ -1122,12 +1147,12 @@ def itineraire(l_sommets):
 
     global temps_pistes, abreviations
 
+    temps = l_sommets[1]
+    l_sommets = l_sommets[0]
     historique = []
     
-    if l_sommets == []:
-        iti = 'Erreur : liste vide'
-    
-    iti = 'Vous vous trouvez actuellement ' + descriptionSommet(l_sommets[0]) + '\n'
+    iti = affichageTempsIti(temps) + '\n'
+    iti += 'Vous vous trouvez actuellement ' + descriptionSommet(l_sommets[0]) + '\n'
     
     for s in range(0, len(l_sommets)-1, 2):
         sA = l_sommets[s]
