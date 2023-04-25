@@ -1589,7 +1589,7 @@ def application():
 
         # Création des widgets
         retour = tk.Button(w_plan_station, text="Retour", font=("helvetica", "15"), command=retourNiveaux)
-        valider = tk.Button(w_plan_station, text="Valider", font=("helvetica", "15"), command=validerSommets)
+        valider = tk.Button(w_plan_station, text="Obtenir l'itinéraire", font=("helvetica", "15"), command=validerSommets)
         label_iti = tk.Label(w_plan_station, text="", font=("helvetica", "10"))
 
         # Placement des widgets
