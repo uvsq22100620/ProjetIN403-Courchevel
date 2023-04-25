@@ -405,8 +405,9 @@ successeurs = {
             188 : (26, 29),
             }
 
+
 # Dictionnaire contenant les données du graphe
-# Rappel : chaque arête est définie par ses 2 sommets, son type, sa longueur et son nom
+# Rappel : chaque arc est défini par ses 2 sommets, son type, sa longueur et son nom
 
 graphe = {
         (1, 2, 'b') : [0.2, 'grandes bosses'],
@@ -783,6 +784,7 @@ temps_pistes = {
         'n' : (24.5, 7, 2)      # piste noire
         }
 
+
 # Dictionnaire des temps des remontées mécaniques
 
 temps_remontees = {
@@ -794,6 +796,7 @@ temps_remontees = {
         'rg' : 2,       # remontée gratuite
         'c' : 3         # à pied
         }
+
 
 # Dictionnaire des abréviations
 
@@ -813,382 +816,10 @@ abreviations = {
 
 ## Définition des autres variables
 
-niveau_skieur = 0
-sommets_selec = [0,0]
-premier_acces = 1
 
-### Fonctions pour trouver le plus court chemin (algorithme de Dijkstra)
-
-
-def calculTemps(sA, sB):
-    ''' Calcule le temps nécessaire au skieur pour aller de sA à sB'''
-
-    global graphe, niveau_skieur, temps_pistes, temps_remontees
-    
-    # On cherche dans le dictionnaire les informations concernant l'arc (sA, sB)
-    for key in graphe.keys():
-        if key[0] == sA and key[1] == sB:
-            arc = (key, graphe[key])
-            type_arc = arc[0][2]        # le type d'un arc est la couleur de la piste ou le type de remontée mécanique
-            longueur_arc = arc[1][0]
-    
-            if type_arc in temps_pistes:
-                # s'il s'agit d'une piste, le temps est calculé en fonction de
-                # sa couleur, de sa longueur et du niveau du skieur
-                temps = longueur_arc * temps_pistes[type_arc][niveau_skieur]
-            else:
-                if type_arc == 'c':
-                    # s'il s'agit d'un arc de type chemin (à pied), il n'y a pas de temps d'attente
-                    temps = longueur_arc * temps_remontees['c']     
-                else:
-                    # s'il s'agit d'une remontée mécanique, le temps est calculé en fonction du
-                    # temps moyen d'attente, du type de remontée et de sa longueur
-                    temps = temps_remontees['temps_moyen_attente'] + (longueur_arc * temps_remontees[type_arc])
-
-            return temps 
-
-
-def algoDijkstra(s_depart, s_arrivee):
-    ''' Fonction realisant l'algorithme de Dijkstra afin de trouver le plus court
-        chemin entre les sommets s_depart et s_arrivee dans le graphe represente
-        dans un dictionnaire'''
-
-    global successeurs
-
-    infini = 2**30
-    nb_sommets = len(successeurs)
-
-    #Creation d'un dictionnaire pour stocker pour chaque sommet un tuple 
-    #contenant le sommet pere et la distance jusqu'au sommet depuis le sommet de depart
-    distances = {sommet: (None, infini) for sommet in range(1, nb_sommets+1)}
-    distances[s_depart] = 0
-
-    sommets_marques = [0]
-
-    s_traitement = s_depart
-    somme = 2
-
-    while len(sommets_marques) < nb_sommets :   #Tant qu'on n'a pas marque tous les sommets
-        sommets_marques.append(s_traitement)    #Ajoute le sommet en cours de traitement aux sommets marques
-
-        if type(successeurs[s_traitement]) == int:     #Regarde si le type est un int pour le cas ou il n'y a qu'un successeur
-            suc = [successeurs[s_traitement]]
-        else:                                               #Sinon on recupere le tuple des successeurs
-            suc = successeurs[s_traitement]
-
-        for sommet in suc :                                 #Parcours les successeurs pour calculer le nouveau temps
-            temps = calculTemps(s_traitement, sommet)
-            if sommet not in sommets_marques:
-                d = distances[sommet][1]                    #Recupere la distance jusqu'au sommet
-                if somme + temps < d:                       #pour la comparer au nouveau temps calcule
-                    distances[sommet] = (s_traitement, somme + temps)
-
-        # Recherche du prochain sommet a traiter parmi les sommets non marques
-        minimum = (None, infini)
-        for sommet in range(1, nb_sommets+1):
-            #Recherche du minimum pour trouver le prochain sommet a traiter
-            if sommet not in sommets_marques and distances[sommet][1] <= minimum[1]:
-                minimum = (sommet, distances[sommet][1])
-
-        s_traitement, somme = minimum
-
-    #Reconstruction du chemin de s_depart jusqu'a s_arrivee
-    sommet = s_arrivee
-    parcours = [s_arrivee]
-    longueur = distances[s_arrivee][1]
-
-    while sommet != s_depart:           #Remonte le graphe depuis le dernier sommet pour obtenir le plus court chemin
-        sommet = distances[sommet][0]
-        parcours.append(sommet)
-
-    parcours.reverse()      #Inverse l'ordre pour avoir le chemin dans le bon sens
-
-    return parcours, longueur
-
-def ajout_type(parcours, dict_graph=graphe):
-    '''Fonction permettant d'ajouter dans le parcours le type de piste et de remontee a partir d'un parcours de PCC'''
-    
-    parcours_and_type = []
-
-    for i in range(0, len(parcours[0])):
-        if i+1 < len(parcours[0]):
-            li = [parcours[0][i], type_arete(dict_graph, parcours[0][i], parcours[0][i+1])]
-            parcours_and_type.extend(li)
-
-    parcours_and_type.append(parcours[0][-1])
-
-    return parcours_and_type, parcours[1]
-
-def type_arete(dico, s1, s2):
-    '''Fonction permettant de renvoyer le(s) type(s) d'arete entre un sommet s1 et s2'''
-
-    li_keys = [keys for keys in dico.keys() if keys[0] == s1 and keys[1] == s2]
-
-    li_type = []
-    for elt in li_keys :
-        li_type.append(elt[2])
-
-    return li_type
-
-# Quand on demande au skieur son niveau, on stocke le résultat dans niveau_skieur, qui est une variable globale.
-# Il peut être débutant (0), intermédiaire (1) ou bien téméraire (2)
-
-
-### Fonction pour donner l'itinéraire au skieur
-
-
-def recupNomsFromSommet(nom_s):
-    ''' Récupère le nom de la ou des listes ou remontées mécaniques
-        à partir du nom du sommet'''
-   
-    while nom_s[0] != '_':     # suppression de la ou des lettres majuscules indiquant le type du sommet:
-        nom_s = nom_s[1:]
-    nom_s = nom_s[1:]
-
-    # Création d'une regex récupérant les noms des pistes ou des remontées :
-    # on veut récupérer ce qui est entouré des caractères '-' et/ou de '_'
-    regex = re.compile("[-_]?([A-Za-z0-9\.]+)[-_]")
-    # Séparation des pistes/remontées dans une liste
-    liste_sans_espace = regex.findall(nom_s)
-
-    # Les noms des pistes en plusieurs mots sont séparés par des points (exemple : dou.du.midi)
-    # Il faut donc remplacer ces points par des espaces
-    liste_avec_espace = []
-    for n in liste_sans_espace:
-        piste = ''
-        for l in n:
-            if l == '.':
-                piste += ' '
-            else:
-                piste += l
-        liste_avec_espace.append(piste)
-
-    return liste_avec_espace
-
-
-def recupTypeFromNom(nom_piste_ou_remontee, p_r):
-    ''' Récupère le type d'une piste ou d'une remontée
-        Exemple : verte, rouge, télécabine, téléski, ...
-        Attention, un même nom peut être porté à la fois par un télésiège, une piste
-        verte et une bleue par exemple.
-        L'argument p_r précise si l'on cherche le nom d'une piste ou d'une remontée ('p' ou 'r')'''
-    
-    global graphe, abreviations, temps_pistes, temps_remontees
-    
-    arcs = graphe.items()
-    t = []
-    for a in arcs:        # on parcourt chaque arc du graphe
-        if a[1][1] == nom_piste_ou_remontee:        # si le nom de l'arc est celui que l'on cherche
-            type_a = a[0][2]
-            if type_a not in t:                     # et qu'on ne l'a pas encore ajouté à la liste t,
-                t.append(type_a)                    # on l'ajoute
-
-    # Suppression des pistes si on cherche un type de remontée mécanique
-    if p_r == 'r':
-        for k in t:
-            if k not in temps_remontees:
-                t.remove(k)
-    # Suppression des remontées si on cherche une couleur de piste
-    else:
-        for k in t:
-            if k not in temps_pistes:
-                t.remove(k)
-
-    # Remplacement des abréviations            
-    for k in range(len(t)):
-        t[k] = abreviations[t[k]]
-
-    return t
-
-
-def recupNomFromArc(sA, sB, type_arc):
-    ''' Récupère le nom d'un arc à partir des numéros
-        des sommets de l'arc en question (et son type)'''
-    # Cette fonction est utilisée dans la fonction itineraire
-    
-    global graphe
-
-    arcs = graphe.items()
-    for a in arcs:      # on parcourt chaque arc du graphe
-        if (a[0][0] == sA) and (a[0][1] == sB) and (a[0][2] == type_arc):         # s'il s'agit d'un arc (sA, sB)
-            return a[1][1]                   # on renvoie son nom
-    return 'pas trouvé'     #### A ENLEVER A LA FIN
-
-
-def descriptionT(nom_s):
-    ''' Décrit les sommets en lien avec une remontée mécanique.
-        Cette fonction traite un des types de sommets possibles dans la fonction descriptionSommet'''
-
-    description_s = ''
-    noms = recupNomsFromSommet(nom_s)       # on récupère une liste des noms des remontées
-    types_remontees = []
-
-    for n in range(len(noms)):
-        types_remontees.append(recupTypeFromNom(noms[n], 'r')[0])
-    debut_fin = nom_s[1]
-
-    if debut_fin == 'D':      # si le sommet est le début d'une remontée mécanique
-        description_s += 'au début du '
-        for k in range(len(noms)):
-            if (k == (len(noms)-1)) and (k != 0):
-                description_s += ' et du '
-            elif k != 0:
-                description_s += ', '
-            description_s += str(types_remontees[k]) + ' ' + str(noms[k])
-
-    elif debut_fin == 'F':     # si le sommet est la fin d'une remontée
-        description_s += 'à la fin du '
-        for k in range(len(noms)):
-            if (k == (len(noms)-1)) and (k != 0):
-                description_s += ' et du '
-            elif k != 0:
-                description_s += ', '
-            description_s += str(types_remontees[k]) + ' ' + str(noms[k])
-            
-    else:                    # s'il s'agit d'un arrêt du télécabine jardin alpin
-                                    # (c'est le seul à avoir plusieurs arrêts)            
-        description_s += "à l'arrêt " + debut_fin + " du télécabine jardin alpin"
-
-    return description_s
-
-
-def descriptionP(nom_s):
-    ''' Décrit les sommets des intersections entre plusieurs pistes.
-        Cette fonction traite un des types de sommets possibles dans la fonction descriptionSommet'''
-
-    description_s = ''
-    description_s += "à l'intersection entre la piste "
-    pistes = recupNomsFromSommet(nom_s)
-    types_pistes = []
-    for n in range(len(pistes)):
-        types_pistes.append(recupTypeFromNom(pistes[n], 'p')[0])
-    for k in range(len(pistes)):
-        if (k == (len(pistes)-1)) and (k != 0):
-            description_s += ' et la piste '
-        elif k != 0:
-            description_s += ', la piste '
-        description_s += str(types_pistes[k]) + ' ' + str(pistes[k])
-
-    return description_s
-
-
-
-def descriptionSommet(s):
-    ''' Retourne une description du sommet s pour que le skieur comprenne où il doit aller.
-        Par exemple, le sommet 5 (TD_chapelets) sera décrit comme "le début du télésiege chapelets" '''
-    
-    global sommets #graphe
-    
-    nom_s = sommets[s]          # on récupère le nom du sommet
-    type_s = nom_s[0]           # le type du sommet est sa lettre majuscule (1er caractère)
-    description_s = ''
-    nb = ('0', '1', '2', '3', '4', '5', '6', '7', '8', '9')
-
-    # Remontée mécanique
-    if type_s == 'T':
-        description_s = descriptionT(nom_s)
-
-    # Intersection entre plusieurs pistes
-    elif type_s == 'P':       
-        description_s = descriptionP(nom_s)
-
-    # Bifurcation d'une piste    
-    elif type_s == 'B':       
-        description_s += 'à la bifurcation de la piste ' + recupNomsFromSommet(nom_s)[0]
-
-    # Point de rencontre
-    elif type_s == 'R':       
-        description_s += 'au point de rencontre '
-        pt = recupNomsFromSommet(nom_s)[0]
-        description_s += pt[0].upper() + pt[1:]
-
-    # Village
-    elif type_s == 'V':
-        description_s += 'au village de '
-        village = recupNomsFromSommet(nom_s)
-        for v in village:
-            if v[0] not in nb:
-                description_s += v[0].upper() + v[1:]
-                description_s += " "
-            else :
-                description_s += v
-
-
-    return description_s
-
-
-def affichageTempsIti(tps_en_minutes):
-    ''' Retourne la phrase décrviant le temps nécessaire pour suivre l'itinéraire'''
-
-    tps_en_minutes = int(tps_en_minutes) + 1    # arrondi supérieur du nombre de minutes
-    nb_heures = tps_en_minutes // 60
-    nb_minutes = tps_en_minutes % 60
-    res = "Pour cet itinéraire, il vous faudra "
-
-    # Affichage du nombre d'heures
-    if nb_heures != 0:
-        if nb_heures == 1:
-            res += "1 heure"                    # s'il y a une heure
-        else:
-            res += str(nb_heures) + " heures"   # s'il y a plusieurs heures
-        if nb_minutes != 0:
-            res += " et "
-    
-    # Affichage du nombre de minutes
-    if nb_minutes != 0:
-        if nb_minutes == 1:                         # s'il y a une minute
-            res += "1 minute"
-        else:
-            res += str(nb_minutes) + " minutes"     # s'il y a plusieurs minutes
-    
-    return res
-
-
-def itineraire(l_sommets):
-    ''' Cette fonction prend en argument la liste des sommets correspondant
-    au plus court chemin trouvé par l'algorithme de Dijkstra,
-    puis elle retourne les indications sur l'itinéraire à suivre '''
-
-    global temps_pistes, abreviations
-
-    temps = l_sommets[1]
-    l_sommets = l_sommets[0]
-    historique = []
-    
-    iti = affichageTempsIti(temps) + '\n'
-    iti += 'Vous vous trouvez actuellement ' + descriptionSommet(l_sommets[0]) + '\n'
-    
-    for s in range(0, len(l_sommets)-1, 2):
-        sA = l_sommets[s]
-        sB = l_sommets[s+2]
-        type_a = l_sommets[s+1]
-        #print('sA ', sA)
-        #print('sB ', sB)
-        #print('type ', type_a)
-        historique.append((type_a, recupNomFromArc(sA, sB, type_a), sB))
-    print(historique)
-    for a in range(len(historique)):
-        if (a == 0) or ((historique[a][0] != historique[a-1][0]) and (historique[a][1] != historique[a-1][1])):
-            type_arc = historique[a][0]
-            if type_arc in temps_pistes:
-                iti += 'Descendez la piste ' + str(abreviations[type_arc]) + ' ' + historique[a][1]
-                iti += " jusqu'" + descriptionSommet(historique[a][2]) + '\n'
-            elif type_arc == 'c':
-                iti += 'Prenez le ' + historique[a][1] + '\n'
-            elif type_arc == 'rg':
-                iti += 'Prenez la remontée gratuite ' + historique[a][1] + '\n'
-            else:
-                iti += 'Prenez le ' + str(abreviations[type_arc]) + ' ' + historique[a][1] + '\n'
-
-    iti += 'Vous êtes arrivés ' + descriptionSommet(l_sommets[len(l_sommets)-1])
-
-    return iti
-
-
-### Interface graphique
-
-## Définition d'une liste contenant les coordonnées des widgets des sommets
-# Chaque élément est un tuple de 4 valeurs (x1, y1, x2, y2)
+# Liste des coordonées des sommets pour l'interface graphique
+# La liste contient 188 tuples de 4 valeurs : un tuple regroupe
+# les coordonnées d'un sommet (x1, y1, x2, y2)
 
 CS = [(),
 (38, 246, 54, 259),
@@ -1381,11 +1012,387 @@ CS = [(),
 (166, 309, 176, 319),]
 
 
+niveau_skieur = 0   # cette variable est initialisé à 0 et pourra prendre 3 valeurs :
+                    # 1 (débutant), 2 (intermédiaire), 3 (téméraire)
+
+sommets_selec = [0,0]   # liste de 2 éléments initialisés à 0, elle contiendra par la suite les
+                        # numéros du sommet de départ et d'arrivée
+
+premier_acces = 1   # variable initalisée à 1 signifiant que l'application n'a pour le moment
+                    # pas été lancée, elle prendra ensuite la valeur 0 jusqu'à la fermeture de
+                    # la fenêtre par l'utilisateur. Elle est utilisée pour savoir s'il faut
+                    # afficher ou non l'image d'accueil
+
+
+### Fonctions pour trouver le plus court chemin (algorithme de Dijkstra)
+
+
+def calculTemps(sA, sB):
+    ''' Calcule le temps nécessaire au skieur pour aller de sA à sB'''
+
+    global graphe, niveau_skieur, temps_pistes, temps_remontees
+    
+    # Recherche dans le dictionnaire les informations concernant l'arc (sA, sB)
+    for key in graphe.keys():
+        if key[0] == sA and key[1] == sB:
+            arc = (key, graphe[key])
+            type_arc = arc[0][2]        # le type d'un arc est la couleur de la piste ou le type de remontée mécanique
+            longueur_arc = arc[1][0]
+    
+            if type_arc in temps_pistes:
+                # S'il s'agit d'une piste, le temps est calculé en fonction de
+                # sa couleur, de sa longueur et du niveau du skieur
+                temps = longueur_arc * temps_pistes[type_arc][niveau_skieur]
+            else:
+                if type_arc == 'c':
+                    # S'il s'agit d'un arc de type chemin (à pied), il n'y a pas de temps d'attente
+                    temps = longueur_arc * temps_remontees['c']     
+                else:
+                    # S'il s'agit d'une remontée mécanique, le temps est calculé en fonction du
+                    # temps moyen d'attente, du type de remontée et de sa longueur
+                    temps = temps_remontees['temps_moyen_attente'] + (longueur_arc * temps_remontees[type_arc])
+
+            return temps 
+
+
+def algoDijkstra(s_depart, s_arrivee):
+    ''' Fonction realisant l'algorithme de Dijkstra afin de trouver le plus court
+        chemin entre les sommets s_depart et s_arrivee dans le graphe represente
+        dans un dictionnaire'''
+
+    global successeurs
+
+    infini = 2**30
+    nb_sommets = len(successeurs)
+
+    # Création d'un dictionnaire pour stocker pour chaque sommet un tuple 
+    # contenant le sommet père et la distance jusqu'au sommet depuis le sommet de départ
+    distances = {sommet: (None, infini) for sommet in range(1, nb_sommets+1)}
+    distances[s_depart] = 0
+
+    sommets_marques = [0]
+
+    s_traitement = s_depart
+    somme = 2
+
+    while len(sommets_marques) < nb_sommets :   # Tant qu'on n'a pas marqué tous les sommets
+        sommets_marques.append(s_traitement)    # Ajout du sommet en cours de traitement aux sommets marqués
+
+        if type(successeurs[s_traitement]) == int:     # Regarde si le type est un int pour le cas ou il n'y a qu'un successeur
+            suc = [successeurs[s_traitement]]
+        else:                                               # Sinon on recupère le tuple des successeurs
+            suc = successeurs[s_traitement]
+
+        for sommet in suc :                                 # Parcourt les successeurs pour calculer le nouveau temps
+            temps = calculTemps(s_traitement, sommet)
+            if sommet not in sommets_marques:
+                d = distances[sommet][1]                    # Recupère la distance jusqu'au sommet
+                if somme + temps < d:                       # pour la comparer au nouveau temps calculé
+                    distances[sommet] = (s_traitement, somme + temps)
+
+        # Recherche du prochain sommet à traiter parmi les sommets non marqués
+        minimum = (None, infini)
+        for sommet in range(1, nb_sommets+1):
+            # Recherche du minimum pour trouver le prochain sommet à traiter
+            if sommet not in sommets_marques and distances[sommet][1] <= minimum[1]:
+                minimum = (sommet, distances[sommet][1])
+
+        s_traitement, somme = minimum
+
+    # Reconstruction du chemin de s_depart jusqu'à s_arrivee
+    sommet = s_arrivee
+    parcours = [s_arrivee]
+    longueur = distances[s_arrivee][1]
+
+    while sommet != s_depart:           # Remonte le graphe depuis le dernier sommet pour obtenir le plus court chemin
+        sommet = distances[sommet][0]
+        parcours.append(sommet)
+
+    parcours.reverse()      # Inverse l'ordre pour avoir le chemin dans le bon sens
+
+    return parcours, longueur
+
+def ajout_type(parcours, dict_graph=graphe):
+    '''Fonction permettant d'ajouter dans le parcours le type de piste et de remontee à partir d'un parcours de PCC'''
+    
+    parcours_and_type = []
+
+    for i in range(0, len(parcours[0])):
+        if i+1 < len(parcours[0]):
+            li = [parcours[0][i], type_arete(dict_graph, parcours[0][i], parcours[0][i+1])]
+            parcours_and_type.extend(li)
+
+    parcours_and_type.append(parcours[0][-1])
+
+    return parcours_and_type, parcours[1]
+
+def type_arete(dico, s1, s2):
+    '''Fonction permettant de renvoyer le(s) type(s) d'arc entre un sommet s1 et s2'''
+
+    li_keys = [keys for keys in dico.keys() if keys[0] == s1 and keys[1] == s2]
+
+    li_type = []
+    for elt in li_keys :
+        li_type.append(elt[2])
+
+    return li_type
+
+
+### Fonctions pour donner l'itinéraire au skieur
+
+
+def recupNomsFromSommet(nom_s):
+    ''' Récupère le nom de la ou des listes ou remontées mécaniques
+        à partir du nom du sommet'''
+   
+    while nom_s[0] != '_':     # suppression de la ou des lettres majuscules indiquant le type du sommet:
+        nom_s = nom_s[1:]
+    nom_s = nom_s[1:]
+
+    # Création d'une regex récupérant les noms des pistes ou des remontées :
+    # on veut récupérer ce qui est entouré des caractères '-' et/ou de '_'
+    regex = re.compile("[-_]?([A-Za-z0-9\.]+)[-_]")
+    # Séparation des pistes/remontées dans une liste
+    liste_sans_espace = regex.findall(nom_s)
+
+    # Les noms des pistes en plusieurs mots sont séparés par des points (exemple : dou.du.midi)
+    # Il faut donc remplacer ces points par des espaces
+    liste_avec_espace = []
+    for n in liste_sans_espace:
+        piste = ''
+        for l in n:
+            if l == '.':
+                piste += ' '
+            else:
+                piste += l
+        liste_avec_espace.append(piste)
+
+    return liste_avec_espace
+
+
+def recupTypeFromNom(nom_piste_ou_remontee, p_r):
+    ''' Récupère le type d'une piste ou d'une remontée
+        Exemple : verte, rouge, télécabine, téléski, ...
+        Attention, un même nom peut être porté à la fois par un télésiège, une piste
+        verte et une bleue par exemple.
+        L'argument p_r précise si l'on cherche le nom d'une piste ou d'une remontée ('p' ou 'r')'''
+    
+    global graphe, abreviations, temps_pistes, temps_remontees
+    
+    arcs = graphe.items()
+    t = []
+    for a in arcs:        # on parcourt chaque arc du graphe
+        if a[1][1] == nom_piste_ou_remontee:        # si le nom de l'arc est celui que l'on cherche
+            type_a = a[0][2]
+            if type_a not in t:                     # et qu'on ne l'a pas encore ajouté à la liste t,
+                t.append(type_a)                    # on l'ajoute
+
+    # Suppression des pistes si on cherche un type de remontée mécanique
+    if p_r == 'r':
+        for k in t:
+            if k not in temps_remontees:
+                t.remove(k)
+    # Suppression des remontées si on cherche une couleur de piste
+    else:
+        for k in t:
+            if k not in temps_pistes:
+                t.remove(k)
+
+    # Remplacement des abréviations            
+    for k in range(len(t)):
+        t[k] = abreviations[t[k]]
+
+    return t
+
+
+def recupNomFromArc(sA, sB, type_arc):
+    ''' Récupère le nom d'un arc à partir des numéros
+        des sommets de l'arc en question (et son type)'''
+    # Cette fonction est utilisée dans la fonction itineraire
+    
+    global graphe
+
+    arcs = graphe.items()
+    for a in arcs:      # Parcourt de chaque arc du graphe
+        if (a[0][0] == sA) and (a[0][1] == sB) and (a[0][2] == type_arc):         # s'il s'agit d'un arc (sA, sB)
+            return a[1][1]                   # on renvoie son nom
+
+
+def descriptionT(nom_s):
+    ''' Décrit les sommets en lien avec une remontée mécanique.
+        Cette fonction traite un des types de sommets possibles dans la fonction descriptionSommet'''
+
+    description_s = ''
+    noms = recupNomsFromSommet(nom_s)       # on récupère une liste des noms des remontées
+    types_remontees = []
+
+    for n in range(len(noms)):
+        types_remontees.append(recupTypeFromNom(noms[n], 'r')[0])
+    debut_fin = nom_s[1]
+
+    if debut_fin == 'D':      # si le sommet est le début d'une remontée mécanique
+        description_s += 'au début du '
+        for k in range(len(noms)):
+            if (k == (len(noms)-1)) and (k != 0):
+                description_s += ' et du '
+            elif k != 0:
+                description_s += ', '
+            description_s += str(types_remontees[k]) + ' ' + str(noms[k])
+
+    elif debut_fin == 'F':     # si le sommet est la fin d'une remontée
+        description_s += 'à la fin du '
+        for k in range(len(noms)):
+            if (k == (len(noms)-1)) and (k != 0):
+                description_s += ' et du '
+            elif k != 0:
+                description_s += ', '
+            description_s += str(types_remontees[k]) + ' ' + str(noms[k])
+            
+    else:                    # s'il s'agit d'un arrêt du télécabine jardin alpin
+                                    # (c'est le seul à avoir plusieurs arrêts)            
+        description_s += "à l'arrêt " + debut_fin + " du télécabine jardin alpin"
+
+    return description_s
+
+
+def descriptionP(nom_s):
+    ''' Décrit les sommets des intersections entre plusieurs pistes.
+        Cette fonction traite un des types de sommets possibles dans la fonction descriptionSommet'''
+
+    description_s = ''
+    description_s += "à l'intersection entre la piste "
+    pistes = recupNomsFromSommet(nom_s)
+    types_pistes = []
+    for n in range(len(pistes)):
+        types_pistes.append(recupTypeFromNom(pistes[n], 'p')[0])
+    for k in range(len(pistes)):
+        if (k == (len(pistes)-1)) and (k != 0):
+            description_s += ' et la piste '
+        elif k != 0:
+            description_s += ', la piste '
+        description_s += str(types_pistes[k]) + ' ' + str(pistes[k])
+
+    return description_s
+
+
+
+def descriptionSommet(s):
+    ''' Retourne une description du sommet s pour que le skieur comprenne où il doit aller.
+        Par exemple, le sommet 5 (TD_chapelets) sera décrit comme "le début du télésiege chapelets" '''
+    
+    global sommets
+    
+    nom_s = sommets[s]          # on récupère le nom du sommet
+    type_s = nom_s[0]           # le type du sommet est sa lettre majuscule (1er caractère)
+    description_s = ''
+    nb = ('0', '1', '2', '3', '4', '5', '6', '7', '8', '9')
+
+    # Remontée mécanique
+    if type_s == 'T':
+        description_s = descriptionT(nom_s)
+
+    # Intersection entre plusieurs pistes
+    elif type_s == 'P':       
+        description_s = descriptionP(nom_s)
+
+    # Bifurcation d'une piste    
+    elif type_s == 'B':       
+        description_s += 'à la bifurcation de la piste ' + recupNomsFromSommet(nom_s)[0]
+
+    # Point de rencontre
+    elif type_s == 'R':       
+        description_s += 'au point de rencontre '
+        pt = recupNomsFromSommet(nom_s)[0]
+        description_s += pt[0].upper() + pt[1:]
+
+    # Village
+    elif type_s == 'V':
+        description_s += 'au village de '
+        village = recupNomsFromSommet(nom_s)
+        for v in village:
+            if v[0] not in nb:
+                description_s += v[0].upper() + v[1:]
+                description_s += " "
+            else :
+                description_s += v
+
+
+    return description_s
+
+
+def affichageTempsIti(tps_en_minutes):
+    ''' Retourne la phrase décrviant le temps nécessaire pour suivre l'itinéraire'''
+
+    tps_en_minutes = int(tps_en_minutes) + 1    # arrondi supérieur du nombre de minutes
+    nb_heures = tps_en_minutes // 60
+    nb_minutes = tps_en_minutes % 60
+    res = "Pour cet itinéraire, il vous faudra "
+
+    # Affichage du nombre d'heures
+    if nb_heures != 0:
+        if nb_heures == 1:
+            res += "1 heure"                    # s'il y a une heure
+        else:
+            res += str(nb_heures) + " heures"   # s'il y a plusieurs heures
+        if nb_minutes != 0:
+            res += " et "
+    
+    # Affichage du nombre de minutes
+    if nb_minutes != 0:
+        if nb_minutes == 1:                         # s'il y a une minute
+            res += "1 minute"
+        else:
+            res += str(nb_minutes) + " minutes"     # s'il y a plusieurs minutes
+    
+    return res
+
+
+def itineraire(l_sommets):
+    ''' Cette fonction prend en argument la liste des sommets correspondant
+    au plus court chemin trouvé par l'algorithme de Dijkstra,
+    puis elle retourne les indications sur l'itinéraire à suivre '''
+
+    global temps_pistes, abreviations
+
+    temps = l_sommets[1]
+    l_sommets = l_sommets[0]
+    historique = []
+    
+    iti = affichageTempsIti(temps) + '\n'
+    iti += 'Vous vous trouvez actuellement ' + descriptionSommet(l_sommets[0]) + '\n'
+    
+    for s in range(0, len(l_sommets)-1, 2):
+        sA = l_sommets[s]
+        sB = l_sommets[s+2]
+        type_a = l_sommets[s+1]
+        historique.append((type_a, recupNomFromArc(sA, sB, type_a), sB))
+    print(historique)
+    for a in range(len(historique)):
+        if (a == 0) or ((historique[a][0] != historique[a-1][0]) and (historique[a][1] != historique[a-1][1])):
+            type_arc = historique[a][0]
+            if type_arc in temps_pistes:
+                iti += 'Descendez la piste ' + str(abreviations[type_arc]) + ' ' + historique[a][1]
+                iti += " jusqu'" + descriptionSommet(historique[a][2]) + '\n'
+            elif type_arc == 'c':
+                iti += 'Prenez le ' + historique[a][1] + '\n'
+            elif type_arc == 'rg':
+                iti += 'Prenez la remontée gratuite ' + historique[a][1] + '\n'
+            else:
+                iti += 'Prenez le ' + str(abreviations[type_arc]) + ' ' + historique[a][1] + '\n'
+
+    iti += 'Vous êtes arrivés ' + descriptionSommet(l_sommets[len(l_sommets)-1])
+
+    return iti
+
+
+### Interface graphique
+
 ## Définition des fonctions utilisées pour l'interface graphique
 
+
 def recupNumSommetClique(event):
-    ''' Cette fonction récupère les coordonnées de l'endroit où l'utilisateur a cliqué,
-        puis elle compare ces coordonnées à celles des différents sommets.
+    ''' Cette fonction récupère les coordonnées de l'endroit où l'utilisateur a cliqué
+        (clic gauche) puis elle compare ces coordonnées à celles des différents sommets.
         Elle renvoie le numéro du sommet correspondant, ou rien si aucun sommet n'a été cliqué
         Elle permet aussi de changer la couleur des sommets sélectionnés '''
     
@@ -1409,7 +1416,8 @@ def recupNumSommetClique(event):
 
 
 def annulerSommetSelec(event):
-    ''' Annule la sélection d'un sommet '''
+    ''' Annule la sélection d'un sommet, fonction appelée
+        suite à un clic droit sur un sommet '''
 
     global CS, sommets_selec
 
@@ -1431,20 +1439,25 @@ def annulerSommetSelec(event):
 def nivDeb():
     ''' Met à jour la variable globale niveau_skieur en fonction du bouton cliqué.
         Ici elle prend la valeur 1 (niveau débutant) '''
+    
     global niveau_skieur
     niveau_skieur = 1
     w_niveaux.destroy()
 
+
 def nivInt():
     ''' Met à jour la variable globale niveau_skieur en fonction du bouton cliqué.
         Ici elle prend la valeur 2 (niveau intermédiaire) '''
+    
     global niveau_skieur
     niveau_skieur = 2
     w_niveaux.destroy()
 
+
 def nivTem():
     ''' Met à jour la variable globale niveau_skieur en fonction du bouton cliqué.
         Ici elle prend la valeur 3 (niveau téméraire) '''
+    
     global niveau_skieur
     niveau_skieur = 3
     w_niveaux.destroy()
@@ -1454,26 +1467,26 @@ def affichageChoixNiveau():
     ''' Affiche la fenêtre permettant le choix du niveau'''
     global w_accueil, can, canvas, w_niveaux
 
+    # Fermeture de la fenêtre affichant l'image d'accueil
     w_accueil.destroy()
+
+    # Création de la fenêtre pour le choix du niveau
     w_niveaux = tk.Tk()
     w_niveaux.title("Tout schuss à Courch !")
 
+    # Création des widgets
     demande_niveau = tk.Label(w_niveaux, text="Quel-est votre niveau ?", font=("helvetica", "30"))
     debutant = tk.Button(w_niveaux, text="Débutant", font=("helvetica", "25"), command=nivDeb)
     intermediaire = tk.Button(w_niveaux, text="Intermédiaire", font=("helvetica", "25"), command=nivInt)
     temeraire = tk.Button(w_niveaux, text="Téméraire", font=("helvetica", "25"), command=nivTem)
 
+    # Placement des widgets
     demande_niveau.grid(row=0, column=0, columnspan=4)
     debutant.grid(row=1, column=0)
     intermediaire.grid(row=1, column=1)
     temeraire.grid(row=1, column=2)
 
     w_niveaux.mainloop()
-
-
-def retourNiveaux():
-    '''Permet de revenir au choix du niveau'''
-    pass
 
 
 def clignoterItineraire(iti):
@@ -1501,14 +1514,16 @@ def validerSommets():
     sA = sommets_selec[0]
     sB = sommets_selec[1]
 
-    if (sA != 0) and (sB != 0):
+    if (sA != 0) and (sB != 0):     # si 2 sommets ont bien été sélectionnés
         label_iti['text'] = ""
+        # Recherche du plus court chemin par l'algorithme de Dijkstra
         iti = ajout_type(algoDijkstra(sA, sB))
         clignoterItineraire(iti)
+        # Affichage des instructions pour suivre l'itinéraire
         label_iti['text'] = itineraire(iti)
     else:
+        # Affichage du message d'erreur
         label_iti['text'] = "Veuillez sélectionner 2 sommets"
-
 
 
 def application():
