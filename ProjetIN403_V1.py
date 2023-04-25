@@ -815,7 +815,7 @@ abreviations = {
 
 niveau_skieur = 0
 sommets_selec = [0,0]
-
+premier_acces = 1
 
 ### Fonctions pour trouver le plus court chemin (algorithme de Dijkstra)
 
@@ -1120,22 +1120,26 @@ def descriptionSommet(s):
 def affichageTempsIti(tps_en_minutes):
     ''' Retourne la phrase décrviant le temps nécessaire pour suivre l'itinéraire'''
 
+    tps_en_minutes = int(tps_en_minutes) + 1    # arrondi supérieur du nombre de minutes
     nb_heures = tps_en_minutes // 60
     nb_minutes = tps_en_minutes % 60
     res = "Pour cet itinéraire, il vous faudra "
 
+    # Affichage du nombre d'heures
     if nb_heures != 0:
         if nb_heures == 1:
-            res += "1 heure"
+            res += "1 heure"                    # s'il y a une heure
         else:
-            res += str(nb_heures) + " heures"
+            res += str(nb_heures) + " heures"   # s'il y a plusieurs heures
         if nb_minutes != 0:
             res += " et "
+    
+    # Affichage du nombre de minutes
     if nb_minutes != 0:
-        if nb_minutes == 1:
+        if nb_minutes == 1:                         # s'il y a une minute
             res += "1 minute"
         else:
-            res += str(nb_minutes) + " minutes"
+            res += str(nb_minutes) + " minutes"     # s'il y a plusieurs minutes
     
     return res
 
@@ -1385,7 +1389,7 @@ def recupNumSommetClique(event):
         Elle renvoie le numéro du sommet correspondant, ou rien si aucun sommet n'a été cliqué
         Elle permet aussi de changer la couleur des sommets sélectionnés '''
     
-    global CS, sommets_selec
+    global CS, sommets_selec, canvas
 
     if (sommets_selec[0] == 0) or (sommets_selec[1] == 0):    # si les 2 sommets n'ont pas encore été sélectionnés
         x = event.x
@@ -1429,102 +1433,157 @@ def nivDeb():
         Ici elle prend la valeur 1 (niveau débutant) '''
     global niveau_skieur
     niveau_skieur = 1
-    w_accueil.destroy()
+    w_niveaux.destroy()
 
 def nivInt():
     ''' Met à jour la variable globale niveau_skieur en fonction du bouton cliqué.
         Ici elle prend la valeur 2 (niveau intermédiaire) '''
     global niveau_skieur
     niveau_skieur = 2
-    w_accueil.destroy()
+    w_niveaux.destroy()
 
 def nivTem():
     ''' Met à jour la variable globale niveau_skieur en fonction du bouton cliqué.
         Ici elle prend la valeur 3 (niveau téméraire) '''
     global niveau_skieur
     niveau_skieur = 3
+    w_niveaux.destroy()
+
+
+def affichageChoixNiveau():
+    ''' Affiche la fenêtre permettant le choix du niveau'''
+    global w_accueil, can, canvas, w_niveaux
+
     w_accueil.destroy()
+    w_niveaux = tk.Tk()
+    w_niveaux.title("Tout schuss à Courch !")
 
-
-def suppAcc():
-    ''' Supprime la fenêtre d'accueil'''
-    #can.delete(image_id)
-    can.delete("all")
-    demande_niveau = tk.Label(w_accueil, text="Quel-est votre niveau ?", font=("helvetica", "30"))
-    debutant = tk.Button(w_accueil, text="Débutant", font=("helvetica", "25"), command=nivDeb)
-    intermediaire = tk.Button(w_accueil, text="Intermédiaire", font=("helvetica", "25"), command=nivInt)
-    temeraire = tk.Button(w_accueil, text="Téméraire", font=("helvetica", "25"), command=nivTem)
+    demande_niveau = tk.Label(w_niveaux, text="Quel-est votre niveau ?", font=("helvetica", "30"))
+    debutant = tk.Button(w_niveaux, text="Débutant", font=("helvetica", "25"), command=nivDeb)
+    intermediaire = tk.Button(w_niveaux, text="Intermédiaire", font=("helvetica", "25"), command=nivInt)
+    temeraire = tk.Button(w_niveaux, text="Téméraire", font=("helvetica", "25"), command=nivTem)
 
     demande_niveau.grid(row=0, column=0, columnspan=4)
     debutant.grid(row=1, column=0)
     intermediaire.grid(row=1, column=1)
     temeraire.grid(row=1, column=2)
 
+    w_niveaux.mainloop()
+
 
 def retourNiveaux():
-    ''' Permet de revenir au choix du niveau '''
+    '''Permet de revenir au choix du niveau'''
     pass
 
 
 def clignoterItineraire(iti):
-    ''' Fais clignoter les sommets de l'itinéraire à emprunter '''
+    '''Fait clignoter les sommets de l'itinéraire à emprunter'''
     pass
 
 
-def validerSommets():
-    ''' '''
+def retourNiveaux():
+    ''' Permet de revenir au choix du niveau '''
+    
+    global w_plan_station
 
-    global sommets_selec
+    w_plan_station.destroy()    # fermeture de la fenêtre actuelle
+    application()               # la fonction principale est rappelée
+
+
+def validerSommets():
+    ''' Cette fonction vérifie que l'utilisateur a bien sélectionné 2 sommets.
+        Si ce n'est pas le cas, elle affiche un message d'erreur.
+        Si c'est le cas, elle utilise la fonction algoDijkstra et itineraire afin
+        de trouver le plus court chemin et de l'afficher sous forme d'instructions
+        claires pour le skieur'''
+
+    global sommets_selec, label_iti
     sA = sommets_selec[0]
     sB = sommets_selec[1]
 
     if (sA != 0) and (sB != 0):
         label_iti['text'] = ""
-        iti = algoDijkstra(sA, sB)
+        iti = ajout_type(algoDijkstra(sA, sB))
         clignoterItineraire(iti)
         label_iti['text'] = itineraire(iti)
     else:
         label_iti['text'] = "Veuillez sélectionner 2 sommets"
 
 
-w_accueil = tk.Tk()
-w_accueil.title("Tout schuss à Courch !")
 
-accueil_courch = Image.open("bienvenue_courchevel.png")
-img = ImageTk.PhotoImage(accueil_courch)
-can = tk.Canvas(w_accueil, width=img.width(), height=img.height())
-image_id = can.create_image(0, 0, anchor='nw', image=img)
-can.grid(row=0, column=0, rowspan=8, columnspan=8)
-w_accueil.after(2000, suppAcc)
+def application():
+    ''' Fonction principale du programme, permettant de lancer l'application.
+        Elle gère l'ouverture et la fermeture des 3 fenêtres, ainsi que l'affichage
+        et l'utilisation de tous les widgets, à l'aide des fonctions définies précedemment'''
 
-w_accueil.mainloop()
+    global niveau_skieur, sommets_selec, CS, premier_acces, can, w_accueil, w_plan_station, canvas, label_iti
+    
+    # Initialistaion des variables globales (ou ré-initialisation si l'utilisateur revient
+    # sur une fenêtre où il est déjà allé grâce au bouton 'Retour')
+    niveau_skieur = 0
+    sommets_selec = [0,0]
 
-if niveau_skieur != 0:
-    fenetre = tk.Tk()
-    fenetre.title("Tout schuss à Courch !")
+    # Création de la fenêtre d'accueil
+    w_accueil = tk.Tk()
+    w_accueil.title("Tout schuss à Courch !")
 
-    plan_station = Image.open("plan_station2.png")
+    # Si l'utilisateur vient de lancer l'application, il visionnera l'image d'accueil
+    if premier_acces == 1:
+        accueil_courch = Image.open("ProjetIN403-Courchevel/bienvenue_courchevel.png")
+        img = ImageTk.PhotoImage(accueil_courch)
+        can = tk.Canvas(w_accueil, width=img.width(), height=img.height())
+        image_id = can.create_image(0, 0, anchor='nw', image=img)
+        can.grid(row=0, column=0, rowspan=8, columnspan=8)
 
-    img = ImageTk.PhotoImage(plan_station)
-    canvas = tk.Canvas(fenetre, width=img.width(), height=img.height())
-    canvas.create_image(0, 0, anchor='nw', image=img)
-    canvas.pack()
+        # Après 2 secondes d'affichage, l'image disparait et la fenêtre pour choisir le niveau s'ouvre
+        w_accueil.after(2000, affichageChoixNiveau)
 
-    # Création des widgets correspondant aux sommets
+        # La variable globale premier_acces est maintenant définie à 0 et le restera jusqu'à la
+        # fermeture du programme. L'image d'accueil ne sera donc plus affichée
+        premier_acces = 0
 
-    for s in range(1, 189):
-        canvas.create_oval(CS[s][0], CS[s][1], CS[s][2], CS[s][3], fill='black')
+    # Sinon, il a cliqué sur le bouton 'Retour' et il revient directement au choix du niveau
+    else:
+        affichageChoixNiveau()
 
-    canvas.bind("<Button-1>", recupNumSommetClique)
-    canvas.bind("<Button-3>", annulerSommetSelec)
+    w_accueil.mainloop()
 
-    retour = tk.Button(fenetre, text="Retour", font=("helvetica", "15"), command=retourNiveaux)
-    retour.grid(column=11, row=10)
+    # Si un niveau a bien été sélectionné, il faut afficher le plan de la station
+    if niveau_skieur != 0:
 
-    valider = tk.Button(fenetre, text="Valider", font=("helvetica", "15"), command=validerSommets)
-    valider.grid(column=10, row=10)
+        # Création de la fenêtre du plan de la station
+        w_plan_station = tk.Tk()
+        w_plan_station.title("Tout schuss à Courch !")
 
-    label_iti = tk.Label(fenetre, text="", font=("helvetica", "12"))
-    label_iti.grid(column=9, columnspan=4, row=0, rowspan=2)
+        # Affichage du plan
+        plan_station = Image.open("ProjetIN403-Courchevel/plan_station2.png")
+        img = ImageTk.PhotoImage(plan_station)
+        canvas = tk.Canvas(w_plan_station, width=img.width(), height=img.height())
+        canvas.create_image(0, 0, anchor='nw', image=img)
+        canvas.grid(column=0, row=0, columnspan=12, rowspan=12)
 
-    fenetre.mainloop()
+        # Création des widgets correspondant aux sommets
+        for s in range(1, 189):
+            canvas.create_oval(CS[s][0], CS[s][1], CS[s][2], CS[s][3], fill='black')
+
+        # Liaison des actions de l'utilisateur avec des commandes
+        # Un clic gauche permet de sélectionner un sommet
+        canvas.bind("<Button-1>", recupNumSommetClique)
+        # Un clic droit permet d'annuler la sélection d'un sommet
+        canvas.bind("<Button-3>", annulerSommetSelec)
+
+        # Création des widgets
+        retour = tk.Button(w_plan_station, text="Retour", font=("helvetica", "15"), command=retourNiveaux)
+        valider = tk.Button(w_plan_station, text="Valider", font=("helvetica", "15"), command=validerSommets)
+        label_iti = tk.Label(w_plan_station, text="", font=("helvetica", "10"))
+
+        # Placement des widgets
+        retour.grid(column=11, row=10)
+        valider.grid(column=10, row=10)
+        label_iti.grid(column=9, columnspan=3, row=0, rowspan=2)
+
+        w_plan_station.mainloop()
+
+
+# Appel de la fonction principale, lancement de l'application
+application()
