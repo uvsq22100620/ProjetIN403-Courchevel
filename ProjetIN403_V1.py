@@ -1357,33 +1357,32 @@ def itineraire(l_sommets):
     temps = l_sommets[1]
     l_sommets = l_sommets[0]
     historique = []
-    
+
     iti = affichageTempsIti(temps) + '\n'
     iti += 'Vous vous trouvez actuellement ' + descriptionSommet(l_sommets[0]) + '\n'
-    
+
     for s in range(0, len(l_sommets)-1, 2):
         sA = l_sommets[s]
         sB = l_sommets[s+2]
         type_a = l_sommets[s+1]
-        historique.append((type_a, recupNomFromArc(sA, sB, type_a), sB))
+        historique.append((type_a, recupNomFromArc(sA, sB, type_a[0]), sB))
     print(historique)
     for a in range(len(historique)):
         if (a == 0) or ((historique[a][0] != historique[a-1][0]) and (historique[a][1] != historique[a-1][1])):
             type_arc = historique[a][0]
-            if type_arc in temps_pistes:
-                iti += 'Descendez la piste ' + str(abreviations[type_arc]) + ' ' + historique[a][1]
+            if type_arc[0] in temps_pistes:
+                iti += 'Descendez la piste ' + str(abreviations[type_arc[0]]) + ' ' + historique[a][1]
                 iti += " jusqu'" + descriptionSommet(historique[a][2]) + '\n'
-            elif type_arc == 'c':
+            elif type_arc[0] == 'c':
                 iti += 'Prenez le ' + historique[a][1] + '\n'
-            elif type_arc == 'rg':
+            elif type_arc[0] == 'rg':
                 iti += 'Prenez la remontée gratuite ' + historique[a][1] + '\n'
             else:
-                iti += 'Prenez le ' + str(abreviations[type_arc]) + ' ' + historique[a][1] + '\n'
+                iti += 'Prenez le ' + str(abreviations[type_arc[0]]) + ' ' + historique[a][1] + '\n'
 
     iti += 'Vous êtes arrivés ' + descriptionSommet(l_sommets[len(l_sommets)-1])
 
     return iti
-
 
 ### Interface graphique
 
