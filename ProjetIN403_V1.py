@@ -358,7 +358,7 @@ successeurs = {
             141 : (125),
             142 : (144, 155),
             143 : (141),
-            144 : (145, 147, 155),
+            144 : (145, 147),
             145 : (146, 147),
             146 : (150),
             147 : (146, 148, 149),
@@ -1065,7 +1065,7 @@ def algoDijkstra(s_depart, s_arrivee):
     infini = 2**30
     nb_sommets = len(successeurs)
 
-    # Création d'un dictionnaire pour stocker pour chaque sommet un tuple 
+    # Création d'un dictionnaire pour stocker pour chaque sommet un tuple
     # contenant le sommet père et la distance jusqu'au sommet depuis le sommet de départ
     distances = {sommet: (None, infini) for sommet in range(1, nb_sommets+1)}
     distances[s_depart] = 0
@@ -1073,7 +1073,7 @@ def algoDijkstra(s_depart, s_arrivee):
     sommets_marques = [0]
 
     s_traitement = s_depart
-    somme = 2
+    somme = 0
 
     while len(sommets_marques) < nb_sommets :   # Tant qu'on n'a pas marqué tous les sommets
         sommets_marques.append(s_traitement)    # Ajout du sommet en cours de traitement aux sommets marqués
@@ -1110,7 +1110,7 @@ def algoDijkstra(s_depart, s_arrivee):
 
     parcours.reverse()      # Inverse l'ordre pour avoir le chemin dans le bon sens
 
-    return parcours, longueur
+    return ajout_type((parcours, longueur))
 
 def ajout_type(parcours, dict_graph=graphe):
     '''Fonction permettant d'ajouter dans le parcours le type de piste et de remontee à partir d'un parcours de PCC'''
@@ -1544,7 +1544,8 @@ def application():
 
     # Si l'utilisateur vient de lancer l'application, il visionnera l'image d'accueil
     if premier_acces == 1:
-        accueil_courch = Image.open("ProjetIN403-Courchevel/bienvenue_courchevel.png")
+        accueil_courch = Image.open("bienvenue_courchevel.png")
+        #accueil_courch = Image.open("ProjetIN403-Courchevel/bienvenue_courchevel.png")
         img = ImageTk.PhotoImage(accueil_courch)
         can = tk.Canvas(w_accueil, width=img.width(), height=img.height())
         image_id = can.create_image(0, 0, anchor='nw', image=img)
@@ -1571,7 +1572,8 @@ def application():
         w_plan_station.title("Tout schuss à Courch !")
 
         # Affichage du plan
-        plan_station = Image.open("ProjetIN403-Courchevel/plan_station2.png")
+        plan_station = Image.open("plan_station2.png")
+        #plan_station = Image.open("ProjetIN403-Courchevel/plan_station2.png")
         img = ImageTk.PhotoImage(plan_station)
         canvas = tk.Canvas(w_plan_station, width=img.width(), height=img.height())
         canvas.create_image(0, 0, anchor='nw', image=img)
