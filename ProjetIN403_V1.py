@@ -141,11 +141,11 @@ sommets = {
     120 : "P_chenus-verdons_1",
     121 : "TD_rocher.de.l'ombre-sources_",
     122 : "P_renard-stade.descente-verdons_1",
-    123 : "P_anemones-chenus-lozeest_1",
+    123 : "P_anemones-chenus-loze.est_1",
     124 : "P_renard-verdons_1",
     125 : "V_courchevel-1850_",
     126 : "TD_loze_",
-    127 : "P_lozeest-jantzen_1",
+    127 : "P_loze.est-jantzen_1",
     128 : "P_anemones-jantzen_1",
     129 : "P_anemones-chenus-loze.est_2",
     130 : "P_anemones-lac.bleu-loze.est_1",
@@ -435,12 +435,12 @@ graphe = {
         (11, 7, 'ts') : [1, 'granges'],
         (11, 13, 'v') : [0.5, 'praline'],
         (11, 187, 'tf') : [0.5, 'stade'],
-        (12, 11, 'v') : [0.5, 'belvédère'],
-        (12, 13, 'v') : [0.3, 'belvédère'],
-        (13, 15, 'v') : [1, 'belvédère'],
+        (12, 11, 'v') : [0.5, 'belvedere'],
+        (12, 13, 'v') : [0.3, 'belvedere'],
+        (13, 15, 'v') : [1, 'belvedere'],
         (14, 15, 'c') : [0.3, 'zen'],
         (15, 6, 'tc') : [3.5, 'ariondaz'],
-        (15, 12, 'rg') : [1.5, 'belvédère'],
+        (15, 12, 'rg') : [1.5, 'belvedere'],
         (15, 14, 'rg') : [0.3, 'mickey'],
         (15, 17, 'tf') : [0.7, 'ste agathe'],
         (15, 20, 'tf') : [2, 'marquis'],
@@ -449,7 +449,7 @@ graphe = {
         (18, 17, 'b') : [0.1, 'indiens'],
         (18, 19, 'b') : [0.8, 'piste bleue'],
         (19, 15, 'v') : [0.2, 'chemin'],
-        (19, 21, 'ts') : [2, '3 Vallées'],
+        (19, 21, 'ts') : [2, '3 Vallees'],
         (20, 8, 'v') : [0.1, 'praline'],
         (20, 18, 'b') : [1.5, 'piste bleue'],
         (21, 20, 'b') : [0.1, 'piste bleue'],
@@ -587,9 +587,9 @@ graphe = {
         (92, 93, 'b') : [0.6, 'pralong'],
         (93, 94, 'b') : [0.1, 'pralong'],
         (93, 101, 'b') : [0.6, 'altiport'],
-        (94, 95, 'b') : [0.2, 'praméruel'],
+        (94, 95, 'b') : [0.2, 'prameruel'],
         (94, 97, 'b') : [0.9, 'pralong'],
-        (95, 46, 'b') : [1.2, 'praméruel'],
+        (95, 46, 'b') : [1.2, 'prameruel'],
         (96, 97, 'c') : [0.4, 'zen'],
         (97, 95, 'tf') : [0.8, 'altiport'],
         (97, 96, 'tf') : [0.4, 'ferme'],
@@ -629,10 +629,10 @@ graphe = {
         (116, 115, 'c') : [0.1, 'chemin du lac'],
         (116, 124, 'v') : [0.8, 'renard'],
         (117, 104, 'rg') : [1.6, 'bellecote'],
-        (117, 118, 'c') : [0.2, 'chemin de la forêt'],
-        (118, 117, 'c') : [0.2, 'chemin de la forêt'],
+        (117, 118, 'c') : [0.2, 'chemin de la foret'],
+        (118, 117, 'c') : [0.2, 'chemin de la foret'],
         (118, 115, 'tc') : [0.7, 'jardin alpin'],
-        (118, 125, 'c') : [0.1, 'chemin des étables'],
+        (118, 125, 'c') : [0.1, 'chemin des etables'],
         (119, 88, 'ts') : [2.1, 'biollay'],
         (119, 133, 'ts') : [2, 'coqs'],
         (120, 124, 'v') : [0.5, 'verdons'],
@@ -645,7 +645,7 @@ graphe = {
         (123, 127, 'b') : [0.5, 'loze est'],
         (124, 125, 'v') : [0.4, 'verdons'],
         (125, 83, 'tc') : [2, 'verdons'],
-        (125, 118, 'c') : [0.1, 'chemin des étables'],
+        (125, 118, 'c') : [0.1, 'chemin des etables'],
         (125, 126, 'c') : [0.1, 'chemin du stade'],
         (125, 133, 'tc') : [2.2, 'chenus'],
         (125, 141, 'c') : [0.1, 'chemin des jardins'],
@@ -653,28 +653,28 @@ graphe = {
         (126, 125, 'c') : [0.1, 'chemin du stade'],
         (126, 135, 'ts') : [1.6, 'loze'],
         (127, 126, 'b') : [0.2, 'loze est'],
-        (128, 123, 'b') : [0.5, 'anémones'],
+        (128, 123, 'b') : [0.5, 'anemones'],
         (128, 127, 'r') : [0.5, 'jantzen'],
         (129, 123, 'r') : [0.8, 'chenus'],
-        (129, 128, 'b') : [0.7, 'anémones'],
+        (129, 128, 'b') : [0.7, 'anemones'],
         (129, 130, 'v') : [0.3, 'loze est'],
         (130, 131, 'b') : [0.3, 'lac bleu'],
         (130, 131, 'v') : [0.5, 'loze est'],
         (131, 123, 'v') : [0.6, 'loze est'],
-        (132, 129, 'b') : [0.2, 'anémones'],
-        (132, 130, 'b') : [0.3, 'anémones'],
+        (132, 129, 'b') : [0.2, 'anemones'],
+        (132, 130, 'b') : [0.3, 'anemones'],
         (133, 129, 'r') : [0.4, 'chenus'],
-        (133, 132, 'b') : [0.3, 'anémones'],
-        (133, 134, 'b') : [0.2, 'crêtes'],
+        (133, 132, 'b') : [0.3, 'anemones'],
+        (133, 134, 'b') : [0.2, 'cretes'],
         (133, 167, 'r') : [1.5, 'lanches'],
         (133, 170, 'ts') : [1.3, 'col de la loze'],
-        (134, 135, 'b') : [0.2, 'crêtes'],
+        (134, 135, 'b') : [0.2, 'cretes'],
         (135, 126, 'r') : [1.8, 'loze'],
         (135, 129, 'v') : [0.5, 'loze est'],
         (135, 136, 'r') : [0.1, 'bouc blanc'],
         (135, 137, 'r') : [0.3, 'dou du midi'],
         (135, 161, 'n') : [0.8, 'jean blanc'],
-        (135, 162, 'b') : [0.8, 'crêtes'],
+        (135, 162, 'b') : [0.8, 'cretes'],
         (136, 163, 'r') : [0.9, 'bouc blanc'],
         (137, 138, 'r') : [0.3, 'petit dou'],
         (137, 160, 'r') : [0.3, 'dou du midi'],
@@ -699,8 +699,8 @@ graphe = {
         (148, 147, 'rg') : [0.3, 'roys'],
         (149, 125, 'tc') : [1.2, 'grangettes'],
         (150, 125, 'ts') : [1.1, 'tovets'],
-        (151, 150, 'r') : [0.4, 'déviation 1550'],
-        (152, 151, 'r') : [0.9, 'déviation 1550'],
+        (151, 150, 'r') : [0.4, 'deviation 1550'],
+        (152, 151, 'r') : [0.9, 'deviation 1550'],
         (152, 184, 'r') : [0.6, 'brigues'],
         (153, 152, 'r') : [0.3, 'brigues'],
         (153, 159, 'ts') : [1, 'epicea'],
@@ -719,14 +719,14 @@ graphe = {
         (160, 158, 'r') : [0.5, 'dou du midi'],
         (161, 160, 'r') : [0.5, 'dou du midi'],
         (161, 186, 'n') : [1.3, 'jean blanc'],
-        (162, 134, 'ts') : [1.1, 'crêtes'],
+        (162, 134, 'ts') : [1.1, 'cretes'],
         (162, 161, 'r') : [0.1, 'dou du midi'],
         (162, 163, 'b') : [0.6, 'arolles'],
         (163, 164, 'b') : [0.5, 'arolles'],
         (163, 164, 'r') : [0.5, 'bouc blanc'],      ####WE GOT A PB
         (164, 172, 'n') : [0.7, 'jockeys'],
         (164, 174, 'r') : [1, 'bouc blanc'],
-        (164, 175, 'b') : [1, 'folyères'],
+        (164, 175, 'b') : [1, 'folyeres'],
         (165, 133, 'tf') : [1.8, 'praz juget'],
         (165, 170, 'ts') : [1.4, 'dou des lanches'],
         (166, 165, 'n') : [0.4, 'dou des lanches'],
@@ -744,11 +744,11 @@ graphe = {
         (173, 180, 'r') : [1.1, 'murettes'],
         (174, 136, 'tf') : [2, 'bouc blanc'],
         (174, 173, 'v') : [0.4, 'plan fontaine'],
-        (174, 176, 'b') : [0.2, 'folyères'],
+        (174, 176, 'b') : [0.2, 'folyeres'],
         (174, 177, 'r') : [1, 'moretta blanche'],
-        (175, 174, 'b') : [0.2, 'folyères'],
-        (175, 176, 'b') : [0.3, 'folyères'],
-        (176, 179, 'b') : [1.8, 'folyères'],
+        (175, 174, 'b') : [0.2, 'folyeres'],
+        (175, 176, 'b') : [0.3, 'folyeres'],
+        (176, 179, 'b') : [1.8, 'folyeres'],
         (177, 178, 'r') : [0.7, 'moretta blanche'],
         (177, 179, 'v') : [1, 'plan fontaine'],
         (178, 164, 'tc') : [2.5, 'la tania'],
@@ -757,7 +757,7 @@ graphe = {
         (179, 178, 'v') : [0.4, 'plan fontaine'],    #a verifier pour le nom
         (180, 181, 'r') : [0.8, 'murettes'],
         (181, 157, 'tc') : [2.4, 'praz'],
-        (181, 162, 'tc') : [2.1, 'forêt'],
+        (181, 162, 'tc') : [2.1, 'foret'],
         (182, 181, 'r') : [0.9, 'brigues'],
         (182, 185, 'r') : [2, 'saint bon'],
         (183, 181, 'r') : [0.8, 'amoureux'],
@@ -769,7 +769,7 @@ graphe = {
         (187, 16, 'b') : [1.1, 'marquis'],
         (187, 18, 'b') : [1, 'piste bleue'],
         (188, 26, 'v') : [0.1, 'praline'],
-        (188, 29, 'v') : [0.9, 'combe']
+        (188, 29, 'ts') : [0.9, 'combe']
         }
 
 
@@ -1012,8 +1012,8 @@ CS = [(),
 (166, 309, 176, 319),]
 
 
-niveau_skieur = 0   # cette variable est initialisé à 0 et pourra prendre 3 valeurs :
-                    # 1 (débutant), 2 (intermédiaire), 3 (téméraire)
+niveau_skieur = -1   # cette variable est initialisé à 0 et pourra prendre 3 valeurs :
+                    # 0 (débutant), 1 (intermédiaire), 2 (téméraire)
 
 sommets_selec = [0,0]   # liste de 2 éléments initialisés à 0, elle contiendra par la suite les
                         # numéros du sommet de départ et d'arrivée
@@ -1078,23 +1078,23 @@ def algoDijkstra(s_depart, s_arrivee):
     while len(sommets_marques) < nb_sommets :   # Tant qu'on n'a pas marqué tous les sommets
         sommets_marques.append(s_traitement)    # Ajout du sommet en cours de traitement aux sommets marqués
 
-        if type(successeurs[s_traitement]) == int:     # Regarde si le type est un int pour le cas ou il n'y a qu'un successeur
+        if type(successeurs[s_traitement]) == int :     # Regarde si le type est un int pour le cas ou il n'y a qu'un successeur
             suc = [successeurs[s_traitement]]
         else:                                               # Sinon on recupère le tuple des successeurs
             suc = successeurs[s_traitement]
 
         for sommet in suc :                                 # Parcourt les successeurs pour calculer le nouveau temps
             temps = calculTemps(s_traitement, sommet)
-            if sommet not in sommets_marques:
+            if sommet not in sommets_marques :
                 d = distances[sommet][1]                    # Recupère la distance jusqu'au sommet
-                if somme + temps < d:                       # pour la comparer au nouveau temps calculé
+                if somme + temps < d :                       # pour la comparer au nouveau temps calculé
                     distances[sommet] = (s_traitement, somme + temps)
 
         # Recherche du prochain sommet à traiter parmi les sommets non marqués
         minimum = (None, infini)
         for sommet in range(1, nb_sommets+1):
             # Recherche du minimum pour trouver le prochain sommet à traiter
-            if sommet not in sommets_marques and distances[sommet][1] <= minimum[1]:
+            if sommet not in sommets_marques and distances[sommet][1] <= minimum[1] :
                 minimum = (sommet, distances[sommet][1])
 
         s_traitement, somme = minimum
@@ -1275,7 +1275,6 @@ def descriptionP(nom_s):
     return description_s
 
 
-
 def descriptionSommet(s):
     ''' Retourne une description du sommet s pour que le skieur comprenne où il doit aller.
         Par exemple, le sommet 5 (TD_chapelets) sera décrit comme "le début du télésiege chapelets" '''
@@ -1366,7 +1365,7 @@ def itineraire(l_sommets):
         sB = l_sommets[s+2]
         type_a = l_sommets[s+1]
         historique.append((type_a, recupNomFromArc(sA, sB, type_a[0]), sB))
-    print(historique)
+
     for a in range(len(historique)):
         if (a == 0) or ((historique[a][0] != historique[a-1][0]) and (historique[a][1] != historique[a-1][1])):
             type_arc = historique[a][0]
@@ -1437,28 +1436,28 @@ def annulerSommetSelec(event):
 
 def nivDeb():
     ''' Met à jour la variable globale niveau_skieur en fonction du bouton cliqué.
-        Ici elle prend la valeur 1 (niveau débutant) '''
+        Ici elle prend la valeur 0 (niveau débutant) '''
+    
+    global niveau_skieur
+    niveau_skieur = 0
+    w_niveaux.destroy()
+
+
+def nivInt():
+    ''' Met à jour la variable globale niveau_skieur en fonction du bouton cliqué.
+        Ici elle prend la valeur 1 (niveau intermédiaire) '''
     
     global niveau_skieur
     niveau_skieur = 1
     w_niveaux.destroy()
 
 
-def nivInt():
+def nivTem():
     ''' Met à jour la variable globale niveau_skieur en fonction du bouton cliqué.
-        Ici elle prend la valeur 2 (niveau intermédiaire) '''
+        Ici elle prend la valeur 2 (niveau téméraire) '''
     
     global niveau_skieur
     niveau_skieur = 2
-    w_niveaux.destroy()
-
-
-def nivTem():
-    ''' Met à jour la variable globale niveau_skieur en fonction du bouton cliqué.
-        Ici elle prend la valeur 3 (niveau téméraire) '''
-    
-    global niveau_skieur
-    niveau_skieur = 3
     w_niveaux.destroy()
 
 
@@ -1516,7 +1515,7 @@ def validerSommets():
     if (sA != 0) and (sB != 0):     # si 2 sommets ont bien été sélectionnés
         label_iti['text'] = ""
         # Recherche du plus court chemin par l'algorithme de Dijkstra
-        iti = ajout_type(algoDijkstra(sA, sB))
+        iti = algoDijkstra(sA, sB)
         clignoterItineraire(iti)
         # Affichage des instructions pour suivre l'itinéraire
         label_iti['text'] = itineraire(iti)
@@ -1564,7 +1563,7 @@ def application():
     w_accueil.mainloop()
 
     # Si un niveau a bien été sélectionné, il faut afficher le plan de la station
-    if niveau_skieur != 0:
+    if niveau_skieur != -1:
 
         # Création de la fenêtre du plan de la station
         w_plan_station = tk.Tk()
