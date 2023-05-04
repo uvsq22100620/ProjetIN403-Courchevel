@@ -1396,16 +1396,23 @@ def recupNumSommetClique(event):
     
     global CS, sommets_selec, canvas
 
-    if (sommets_selec[0] == 0) or (sommets_selec[1] == 0):    # si les 2 sommets n'ont pas encore été sélectionnés
+    # Si les 2 sommets n'ont pas encore été sélectionnés
+    if (sommets_selec[0] == 0) or (sommets_selec[1] == 0):
+        # On récupère les coorodnnées du point cliqué
         x = event.x
         y = event.y
-        for s in range(1, 189):     # on parcourt les coordonnées de chaque sommet
+        # On parcourt les coordonnées de chaque sommet
+        for s in range(1, 189):     
             x1 = CS[s][0]
             y1 = CS[s][1]
             x2 = CS[s][2]
             y2 = CS[s][3]
+            # On regarde si les coordonnées du point cliqué se trouvent entre les
+            # coordonnées du sommet, c'est-à-dire si l'utilisateur a cliqué sur ce sommet
             if (x1<=x) and (x<=x2) and (y1<=y) and (y<=y2):
+                # Ce sommet devient rouge
                 canvas.create_oval(x1, y1, x2, y2, fill='red')
+                # Le numéro du sommet est ajouté à la liste sommets_selec
                 if sommets_selec[0] != 0:
                     sommets_selec[1] = s
                 else:
@@ -1419,15 +1426,21 @@ def annulerSommetSelec(event):
 
     global CS, sommets_selec
 
+    # Si au moins un sommet a été sélectionné pour le moment
     if sommets_selec != [0,0]:
+        # On récupère les coordonnées de l'endroit où l'utilisateur a cliqué
         x = event.x
         y = event.y
-        for s in range(1, 189):     # on parcourt les coordonnées de chaque sommet
+        # On parcourt les coordonnées de chaque sommet
+        for s in range(1, 189):
             x1 = CS[s][0]
             y1 = CS[s][1]
             x2 = CS[s][2]
             y2 = CS[s][3]
+            # On regarde si les coordonnées du point cliqué se trouvent entre les coordonnées du sommet,
+            # c'est-à-dire si l'utilisateur a cliqué sur ce sommet, et que ce sommet était déjà sélectionné
             if (x1<=x) and (x<=x2) and (y1<=y) and (y<=y2) and s in sommets_selec:
+                # Si c'est le cas, ce sommet redevient noir et la liste sommets_selec est modifiée
                 canvas.create_oval(x1, y1, x2, y2, fill='black')
                 sommets_selec.remove(s)
                 sommets_selec.append(0)
@@ -1488,18 +1501,21 @@ def affichageChoixNiveau():
 
 
 def numeroteSommets(iti):
-    ''' Affiche l'ordre des sommets à emprunter pour suivre l'itinéraire '''
+    ''' Affiche l'ordre des sommets à emprunter pour suivre l'itinéraire.
+        Les sommets à suivre deviennent rouge et sont numérotés'''
 
     global CS, canvas
 
     num = 1
     for k in range(0, len(iti), 2):
+        # Création d'un rond rouge au niveau du sommet pour le faire changer de couleur
         coord = CS[iti[k]]
         x1 = coord[0]
         y1 = coord[1]
         x2 = coord[2]
         y2 = coord[3]
         canvas.create_oval(x1, y1, x2, y2, fill='red', outline='red')
+        # Création du texte pour numéroté le sommet en question
         x_num = (x1+x2)/2
         y_num = (y1+y2)/2
         canvas.create_text(x_num, y_num, text=str(num), font=("helvetica", "10"))
@@ -1530,6 +1546,7 @@ def validerSommets():
         label_iti['text'] = ""
         # Recherche du plus court chemin par l'algorithme de Dijkstra
         iti = algoDijkstra(sA, sB)
+        # Affichage des sommets à suivre (ils deviennent rouges et sont numérotés)
         numeroteSommets(iti[0])
         # Affichage des instructions pour suivre l'itinéraire
         label_iti['text'] = itineraire(iti)
