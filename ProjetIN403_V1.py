@@ -1492,13 +1492,18 @@ def numeroteSommets(iti):
 
     global CS, canvas
 
+    num = 1
     for k in range(0, len(iti), 2):
         coord = CS[iti[k]]
         x1 = coord[0]
         y1 = coord[1]
         x2 = coord[2]
         y2 = coord[3]
-        canvas.create_oval(x1, y1, x2, y2, fill='red', text=str(k))
+        canvas.create_oval(x1, y1, x2, y2, fill='red', outline='red')
+        x_num = (x1+x2)/2
+        y_num = (y1+y2)/2
+        canvas.create_text(x_num, y_num, text=str(num), font=("helvetica", "10"))
+        num += 1
 
 
 def retourNiveaux():
@@ -1525,7 +1530,7 @@ def validerSommets():
         label_iti['text'] = ""
         # Recherche du plus court chemin par l'algorithme de Dijkstra
         iti = algoDijkstra(sA, sB)
-        numeroteSommets(iti)
+        numeroteSommets(iti[0])
         # Affichage des instructions pour suivre l'itinéraire
         label_iti['text'] = itineraire(iti)
     else:
