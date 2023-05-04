@@ -1487,9 +1487,18 @@ def affichageChoixNiveau():
     w_niveaux.mainloop()
 
 
-def clignoterItineraire(iti):
-    '''Fait clignoter les sommets de l'itinéraire à emprunter'''
-    pass
+def numeroteSommets(iti):
+    ''' Affiche l'ordre des sommets à emprunter pour suivre l'itinéraire '''
+
+    global CS, canvas
+
+    for k in range(0, len(iti), 2):
+        coord = CS[iti[k]]
+        x1 = coord[0]
+        y1 = coord[1]
+        x2 = coord[2]
+        y2 = coord[3]
+        canvas.create_oval(x1, y1, x2, y2, fill='red', text=str(k))
 
 
 def retourNiveaux():
@@ -1516,7 +1525,7 @@ def validerSommets():
         label_iti['text'] = ""
         # Recherche du plus court chemin par l'algorithme de Dijkstra
         iti = algoDijkstra(sA, sB)
-        clignoterItineraire(iti)
+        numeroteSommets(iti)
         # Affichage des instructions pour suivre l'itinéraire
         label_iti['text'] = itineraire(iti)
     else:
@@ -1542,8 +1551,8 @@ def application():
 
     # Si l'utilisateur vient de lancer l'application, il visionnera l'image d'accueil
     if premier_acces == 1:
-        accueil_courch = Image.open("bienvenue_courchevel.png")
-        #accueil_courch = Image.open("ProjetIN403-Courchevel/bienvenue_courchevel.png")
+        #accueil_courch = Image.open("bienvenue_courchevel.png")
+        accueil_courch = Image.open("ProjetIN403-Courchevel/bienvenue_courchevel.png")
         img = ImageTk.PhotoImage(accueil_courch)
         can = tk.Canvas(w_accueil, width=img.width(), height=img.height())
         image_id = can.create_image(0, 0, anchor='nw', image=img)
@@ -1570,8 +1579,8 @@ def application():
         w_plan_station.title("Tout schuss à Courch !")
 
         # Affichage du plan
-        plan_station = Image.open("plan_station2.png")
-        #plan_station = Image.open("ProjetIN403-Courchevel/plan_station2.png")
+        #plan_station = Image.open("plan_station2.png")
+        plan_station = Image.open("ProjetIN403-Courchevel/plan_station2.png")
         img = ImageTk.PhotoImage(plan_station)
         canvas = tk.Canvas(w_plan_station, width=img.width(), height=img.height())
         canvas.create_image(0, 0, anchor='nw', image=img)
