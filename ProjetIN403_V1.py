@@ -1126,7 +1126,7 @@ def ajout_type(parcours, dict_graph=graphe):
 
     return parcours_and_type, parcours[1]
 
-def type_arete(dico, s1, s2):
+def type_arete(dico:dict, s1, s2):
     '''Fonction permettant de renvoyer le(s) type(s) d'arc entre un sommet s1 et s2'''
 
     li_keys = [keys for keys in dico.keys() if keys[0] == s1 and keys[1] == s2]
