@@ -35,7 +35,7 @@ sommets = {
     14 : "TF_mickey_",
     15 : "V_courchevel-1650_",
     16 : "P_indiens-marquis_1",
-    17 : "TF_steagathe_",
+    17 : "TF_ste.agathe_",
     18 : "P_indiens-piste.bleue_1",
     19 : "TD_3.vallees_",
     20 : "TF_marquis_",
