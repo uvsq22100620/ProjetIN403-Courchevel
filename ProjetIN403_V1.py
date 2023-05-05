@@ -1523,8 +1523,10 @@ def validerSommets():
 
     sA = sommets_selec[0]
     sB = sommets_selec[1]
-
-    if (sA != 0) and (sB != 0):     # si 2 sommets ont bien été sélectionnés
+    
+    if sA == 185:
+        label_iti['text'] = "Aucun itinéraire n'est trouvé au départ de St Bon,\nveuillez vous renseigner au près des navettes à disposition"
+    elif (sA != 0) and (sB != 0):     # si 2 sommets ont bien été sélectionnés
         label_iti['text'] = ""
         # Recherche du plus court chemin par l'algorithme de Dijkstra
         iti = algoDijkstra(sA, sB)
