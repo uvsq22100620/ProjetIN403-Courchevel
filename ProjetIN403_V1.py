@@ -1023,6 +1023,7 @@ premier_acces = 1   # variable initalisée à 1 signifiant que l'application n'a
                     # la fenêtre par l'utilisateur. Elle est utilisée pour savoir s'il faut
                     # afficher ou non l'image d'accueil
 
+infini = 2**30
 
 ### Fonctions pour trouver le plus court chemin (algorithme de Dijkstra)
 
@@ -1031,28 +1032,35 @@ def calculTemps(sA, sB):
     ''' Calcule le temps nécessaire au skieur pour aller de sA à sB'''
 
     global graphe, niveau_skieur, temps_pistes, temps_remontees
-    
-    # Recherche dans le dictionnaire les informations concernant l'arc (sA, sB)
-    for key in graphe.keys():
-        if key[0] == sA and key[1] == sB:
-            arc = (key, graphe[key])
-            type_arc = arc[0][2]        # le type d'un arc est la couleur de la piste ou le type de remontée mécanique
-            longueur_arc = arc[1][0]
-    
-            if type_arc in temps_pistes:
-                # S'il s'agit d'une piste, le temps est calculé en fonction de
-                # sa couleur, de sa longueur et du niveau du skieur
-                temps = longueur_arc * temps_pistes[type_arc][niveau_skieur]
-            else:
-                if type_arc == 'c':
-                    # S'il s'agit d'un arc de type chemin (à pied), il n'y a pas de temps d'attente
-                    temps = longueur_arc * temps_remontees['c']     
-                else:
-                    # S'il s'agit d'une remontée mécanique, le temps est calculé en fonction du
-                    # temps moyen d'attente, du type de remontée et de sa longueur
-                    temps = temps_remontees['temps_moyen_attente'] + (longueur_arc * temps_remontees[type_arc])
 
-            return temps 
+    temps = infini
+    # Recherche dans le dictionnaire les informations concernant l'arc (sA, sB)
+
+    li_keys = [keys for keys in graphe.keys() if keys[0] == sA and keys[1] == sB]
+
+    for key in li_keys:
+        arc = (key, graphe[key])
+        type_arc = arc[0][2]        # le type d'un arc est la couleur de la piste ou le type de remontée mécanique
+        longueur_arc = arc[1][0]
+
+        if type_arc in temps_pistes:
+            # S'il s'agit d'une piste, le temps est calculé en fonction de
+            # sa couleur, de sa longueur et du niveau du skieur
+            nouveau_temps = longueur_arc * temps_pistes[type_arc][niveau_skieur]
+
+        else:
+            if type_arc == 'c':
+                # S'il s'agit d'un arc de type chemin (à pied), il n'y a pas de temps d'attente
+                nouveau_temps = longueur_arc * temps_remontees['c']
+            else:
+                # S'il s'agit d'une remontée mécanique, le temps est calculé en fonction du
+                # temps moyen d'attente, du type de remontée et de sa longueur
+                nouveau_temps = temps_remontees['temps_moyen_attente'] + (longueur_arc * temps_remontees[type_arc])
+
+        if nouveau_temps < temps:
+            temps = nouveau_temps
+
+    return temps, type_arc 
 
 
 def algoDijkstra(s_depart, s_arrivee):
@@ -1062,7 +1070,6 @@ def algoDijkstra(s_depart, s_arrivee):
 
     global successeurs
 
-    infini = 2**30
     nb_sommets = len(successeurs)
 
     # Création d'un dictionnaire pour stocker pour chaque sommet un tuple
@@ -1084,11 +1091,11 @@ def algoDijkstra(s_depart, s_arrivee):
             suc = successeurs[s_traitement]
 
         for sommet in suc :                                 # Parcourt les successeurs pour calculer le nouveau temps
-            temps = calculTemps(s_traitement, sommet)
+            temps, type_arc = calculTemps(s_traitement, sommet)
             if sommet not in sommets_marques :
                 d = distances[sommet][1]                    # Recupère la distance jusqu'au sommet
                 if somme + temps < d :                       # pour la comparer au nouveau temps calculé
-                    distances[sommet] = (s_traitement, somme + temps)   #On stocke le sommet parent et le nouveau temps calculé
+                    distances[sommet] = ((s_traitement, type_arc), somme + temps)   #On stocke le sommet parent et le nouveau temps calculé
 
         # Recherche du prochain sommet à traiter parmi les sommets non marqués
         minimum = (None, infini)
@@ -1105,37 +1112,13 @@ def algoDijkstra(s_depart, s_arrivee):
     longueur = distances[s_arrivee][1]
 
     while sommet != s_depart:           # Remonte le graphe depuis le dernier sommet pour obtenir le plus court chemin
-        sommet = distances[sommet][0]
+        parcours.append(distances[sommet][0][1])
+        sommet = distances[sommet][0][0]
         parcours.append(sommet)
 
     parcours.reverse()      # Inverse l'ordre pour avoir le chemin dans le bon sens
 
-    return ajout_type((parcours, longueur))
-
-def ajout_type(parcours, dict_graph=graphe):
-    '''Fonction permettant d'ajouter dans le parcours le type de piste et de remontee à partir d'un parcours de PCC'''
-    
-    parcours_and_type = []
-
-    for i in range(0, len(parcours[0])):
-        if i+1 < len(parcours[0]):
-            li = [parcours[0][i], type_arete(dict_graph, parcours[0][i], parcours[0][i+1])]
-            parcours_and_type.extend(li)
-
-    parcours_and_type.append(parcours[0][-1])
-
-    return parcours_and_type, parcours[1]
-
-def type_arete(dico:dict, s1, s2):
-    '''Fonction permettant de renvoyer le(s) type(s) d'arc entre un sommet s1 et s2'''
-
-    li_keys = [keys for keys in dico.keys() if keys[0] == s1 and keys[1] == s2]
-
-    li_type = []
-    for elt in li_keys :
-        li_type.append(elt[2])
-
-    return li_type
+    return parcours, longueur
 
 
 ### Fonctions pour donner l'itinéraire au skieur
@@ -1364,20 +1347,20 @@ def itineraire(l_sommets):
         sA = l_sommets[s]
         sB = l_sommets[s+2]
         type_a = l_sommets[s+1]
-        historique.append((type_a, recupNomFromArc(sA, sB, type_a[0]), sB))
+        historique.append((type_a, recupNomFromArc(sA, sB, type_a), sB))
 
     for a in range(len(historique)):
         if (a == 0) or ((historique[a][0] != historique[a-1][0]) and (historique[a][1] != historique[a-1][1])):
             type_arc = historique[a][0]
-            if type_arc[0] in temps_pistes:
-                iti += 'Descendez la piste ' + str(abreviations[type_arc[0]]) + ' ' + historique[a][1]
+            if type_arc in temps_pistes:
+                iti += 'Descendez la piste ' + str(abreviations[type_arc]) + ' ' + historique[a][1]
                 iti += " jusqu'" + descriptionSommet(historique[a][2]) + '\n'
-            elif type_arc[0] == 'c':
+            elif type_arc == 'c':
                 iti += 'Prenez le ' + historique[a][1] + '\n'
-            elif type_arc[0] == 'rg':
+            elif type_arc == 'rg':
                 iti += 'Prenez la remontée gratuite ' + historique[a][1] + '\n'
             else:
-                iti += 'Prenez le ' + str(abreviations[type_arc[0]]) + ' ' + historique[a][1] + '\n'
+                iti += 'Prenez le ' + str(abreviations[type_arc]) + ' ' + historique[a][1] + '\n'
 
     iti += 'Vous êtes arrivés ' + descriptionSommet(l_sommets[len(l_sommets)-1])
 
@@ -1573,8 +1556,8 @@ def application():
 
     # Si l'utilisateur vient de lancer l'application, il visionnera l'image d'accueil
     if premier_acces == 1:
-        #accueil_courch = Image.open("bienvenue_courchevel.png")
-        accueil_courch = Image.open("ProjetIN403-Courchevel/bienvenue_courchevel.png")
+        accueil_courch = Image.open("bienvenue_courchevel.png")
+        #accueil_courch = Image.open("ProjetIN403-Courchevel/bienvenue_courchevel.png")
         img = ImageTk.PhotoImage(accueil_courch)
         can = tk.Canvas(w_accueil, width=img.width(), height=img.height())
         image_id = can.create_image(0, 0, anchor='nw', image=img)
@@ -1601,8 +1584,8 @@ def application():
         w_plan_station.title("Tout schuss à Courch !")
 
         # Affichage du plan
-        #plan_station = Image.open("plan_station2.png")
-        plan_station = Image.open("ProjetIN403-Courchevel/plan_station2.png")
+        plan_station = Image.open("plan_station2.png")
+        #plan_station = Image.open("ProjetIN403-Courchevel/plan_station2.png")
         img = ImageTk.PhotoImage(plan_station)
         canvas = tk.Canvas(w_plan_station, width=img.width(), height=img.height())
         canvas.create_image(0, 0, anchor='nw', image=img)
