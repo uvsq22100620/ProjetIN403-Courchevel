@@ -1012,7 +1012,7 @@ CS = [(),
 (166, 309, 176, 319),]
 
 
-niveau_skieur = -1   # cette variable est initialisé à 0 et pourra prendre 3 valeurs :
+niveau_skieur = -1   # cette variable est initialisé à -1 et pourra prendre 3 valeurs :
                     # 0 (débutant), 1 (intermédiaire), 2 (téméraire)
 
 sommets_selec = [0,0]   # liste de 2 éléments initialisés à 0, elle contiendra par la suite les
