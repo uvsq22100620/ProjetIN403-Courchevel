@@ -486,7 +486,7 @@ graphe = {
         (37, 40, 'ts') : [0.7, 'roc merlet'],
         (38, 36, 'b') : [0.1, 'mont russes'],
         (38, 39, 'b') : [0.4, 'mont russes'],
-        (39, 34, 'b') : [0.7, 'mont russes ou plan mugnier'],
+        (39, 34, 'b') : [0.7, 'plan mugnier'],
         (40, 37, 'r') : [0.7, 'roc merlet'],
         (40, 41, 'r') : [0.3, 'Jean Pachod'],
         (41, 42, 'r') : [1.7, 'Jean Pachod'],
