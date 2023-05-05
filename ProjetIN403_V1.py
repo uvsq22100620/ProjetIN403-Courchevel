@@ -1330,6 +1330,22 @@ def affichageTempsIti(tps_en_minutes):
     
     return res
 
+def etape_iti(historique, depart, fin):
+    '''Fonction permettant de décrire une étape de l'itinéraire lorsqu'il y a un changement de piste'''
+
+    type_arc = historique[depart][0]   #Recupère le type de l'arc
+
+    if type_arc in temps_pistes:    #Si c'est une piste
+        etape = 'Descendez la piste ' + str(abreviations[type_arc]) + ' ' + historique[depart][1]
+        etape += " jusqu'" + descriptionSommet(historique[fin][2]) + '\n'
+    elif type_arc == 'c':           #Si c'est un chemin
+        etape = 'Prenez le ' + historique[fin][1] + '\n'
+    elif type_arc == 'rg':          #Si c'est une remontée gratuite
+        etape = 'Prenez la remontée gratuite ' + historique[fin][1] + '\n'
+    else:                           #Si c'est une remontée
+        etape = 'Prenez le ' + str(abreviations[type_arc]) + ' ' + historique[fin][1] + '\n'
+
+    return etape
 
 def itineraire(l_sommets):
     ''' Cette fonction prend en argument la liste des sommets correspondant
@@ -1338,31 +1354,34 @@ def itineraire(l_sommets):
 
     global temps_pistes, abreviations
 
-    temps = l_sommets[1]
-    l_sommets = l_sommets[0]
+    temps = l_sommets[1]        #On récupère le temps total du PCC
+    l_sommets = l_sommets[0]    #On récupère le PCC
     historique = []
 
-    iti = affichageTempsIti(temps) + '\n'
+    iti = affichageTempsIti(temps) + '\n'   #Affichage du temps total estimé
     iti += 'Vous vous trouvez actuellement ' + descriptionSommet(l_sommets[0]) + '\n'
 
+    #Constition de l'historique du PCC en ajoutant pour chaque arc : le type de l'arc, le nom de l'arc et le sommet d'arrivée de l'arc
     for s in range(0, len(l_sommets)-1, 2):
         sA = l_sommets[s]
         sB = l_sommets[s+2]
         type_a = l_sommets[s+1]
         historique.append((type_a, recupNomFromArc(sA, sB, type_a), sB))
 
-    for a in range(len(historique)):
-        if (a == 0) or ((historique[a][0] != historique[a-1][0]) and (historique[a][1] != historique[a-1][1])):
-            type_arc = historique[a][0]
-            if type_arc in temps_pistes:
-                iti += 'Descendez la piste ' + str(abreviations[type_arc]) + ' ' + historique[a][1]
-                iti += " jusqu'" + descriptionSommet(historique[a][2]) + '\n'
-            elif type_arc == 'c':
-                iti += 'Prenez le ' + historique[a][1] + '\n'
-            elif type_arc == 'rg':
-                iti += 'Prenez la remontée gratuite ' + historique[a][1] + '\n'
-            else:
-                iti += 'Prenez le ' + str(abreviations[type_arc]) + ' ' + historique[a][1] + '\n'
+    depart = 0      #Initialisation d'un point de départ
+
+    for a in range(1, len(historique)):     
+        #Si la condition suivante n'est pas remplie, alors cela signifie que l'arc 'a' de l'historique correspond à la suite
+        #de l'arc stocké dans la variable départ (c'est la même piste), donc on parcourt les arcs de l'historique jusqu'à trouver 
+        #un arc différent de l'arc départ (une intersection de piste)
+        if (historique[a][0] != historique[depart][0]) or (historique[a][1] != historique[depart][1]):
+            #On récupère l'étape de l'itinéraire correspondant à un changement de piste
+            iti += etape_iti(historique, depart, a-1)
+            depart = a      #On stocke le nouveau depart
+
+    #On rappelle etape_iti pour obtenir la dernière étape de l'itinéraire
+    #et si on doit toujours rester sur la même piste cela permet aussi d'avoir une description d'itinéraire
+    iti += etape_iti(historique, depart, len(historique)-1)
 
     iti += 'Vous êtes arrivés ' + descriptionSommet(l_sommets[len(l_sommets)-1])
 
@@ -1574,8 +1593,8 @@ def application():
 
     # Si l'utilisateur vient de lancer l'application, il visionnera l'image d'accueil
     if premier_acces == 1:
-        #accueil_courch = Image.open("bienvenue_courchevel.png")
-        accueil_courch = Image.open("ProjetIN403-Courchevel/bienvenue_courchevel.png")
+        accueil_courch = Image.open("bienvenue_courchevel.png")
+        #accueil_courch = Image.open("ProjetIN403-Courchevel/bienvenue_courchevel.png")
         img = ImageTk.PhotoImage(accueil_courch)
         can = tk.Canvas(w_accueil, width=img.width(), height=img.height())
         image_id = can.create_image(0, 0, anchor='nw', image=img)
@@ -1602,8 +1621,8 @@ def application():
         w_plan_station.title("Tout schuss à Courch !")
 
         # Affichage du plan
-        #plan_station = Image.open("plan_station2.png")
-        plan_station = Image.open("ProjetIN403-Courchevel/plan_station2.png")
+        plan_station = Image.open("plan_station2.png")
+        #plan_station = Image.open("ProjetIN403-Courchevel/plan_station2.png")
         img = ImageTk.PhotoImage(plan_station)
         canvas = tk.Canvas(w_plan_station, width=img.width(), height=img.height())
         canvas.create_image(0, 0, anchor='nw', image=img)
