@@ -119,7 +119,7 @@ sommets = {
     98 : "TF_cospillot_",
     99 : "R_pralong_",
     100 : "P_biollay-titi_1",
-    101 : "P_biollay-tit_2",
+    101 : "P_biollay-titi_2",
     102 : "TF_jardin.alpin_",
     103 : "B_titi_1",
     104 : "TF_bellecote_",
@@ -1572,8 +1572,8 @@ def application():
 
     # Si l'utilisateur vient de lancer l'application, il visionnera l'image d'accueil
     if premier_acces == 1:
-        #accueil_courch = Image.open("bienvenue_courchevel.png")
-        accueil_courch = Image.open("ProjetIN403-Courchevel/bienvenue_courchevel.png")
+        accueil_courch = Image.open("bienvenue_courchevel.png")
+        #accueil_courch = Image.open("ProjetIN403-Courchevel/bienvenue_courchevel.png")
         img = ImageTk.PhotoImage(accueil_courch)
         can = tk.Canvas(w_accueil, width=img.width(), height=img.height())
         image_id = can.create_image(0, 0, anchor='nw', image=img)
@@ -1600,8 +1600,8 @@ def application():
         w_plan_station.title("Tout schuss à Courch !")
 
         # Affichage du plan
-        #plan_station = Image.open("plan_station2.png")
-        plan_station = Image.open("ProjetIN403-Courchevel/plan_station2.png")
+        plan_station = Image.open("plan_station2.png")
+        #plan_station = Image.open("ProjetIN403-Courchevel/plan_station2.png")
         img = ImageTk.PhotoImage(plan_station)
         canvas = tk.Canvas(w_plan_station, width=img.width(), height=img.height())
         canvas.create_image(0, 0, anchor='nw', image=img)
