@@ -1521,7 +1521,6 @@ def validerSommets():
         de trouver le plus court chemin et de l'afficher sous forme d'instructions
         claires pour le skieur'''
 
-    global sommets_selec, label_iti
     sA = sommets_selec[0]
     sB = sommets_selec[1]
 
@@ -1536,6 +1535,16 @@ def validerSommets():
     else:
         # Affichage du message d'erreur
         label_iti['text'] = "Veuillez sélectionner 2 sommets"
+    valider.grid_remove()
+    masquer.grid(column=10, row=10)
+
+
+def masquerIti():
+    ''' Permet de masquer les instructions de l'itinéraire '''
+
+    label_iti["text"] = ''
+    masquer.grid_remove()
+    valider.grid(column=10, row=10)
 
 
 def application():
@@ -1543,7 +1552,7 @@ def application():
         Elle gère l'ouverture et la fermeture des 3 fenêtres, ainsi que l'affichage
         et l'utilisation de tous les widgets, à l'aide des fonctions définies précedemment'''
 
-    global niveau_skieur, sommets_selec, CS, premier_acces, can, w_accueil, w_plan_station, canvas, label_iti
+    global niveau_skieur, sommets_selec, CS, premier_acces, can, w_accueil, w_plan_station, canvas, label_iti, valider, masquer
     
     # Initialistaion des variables globales (ou ré-initialisation si l'utilisateur revient
     # sur une fenêtre où il est déjà allé grâce au bouton 'Retour')
@@ -1556,8 +1565,8 @@ def application():
 
     # Si l'utilisateur vient de lancer l'application, il visionnera l'image d'accueil
     if premier_acces == 1:
-        accueil_courch = Image.open("bienvenue_courchevel.png")
-        #accueil_courch = Image.open("ProjetIN403-Courchevel/bienvenue_courchevel.png")
+        #accueil_courch = Image.open("bienvenue_courchevel.png")
+        accueil_courch = Image.open("ProjetIN403-Courchevel/bienvenue_courchevel.png")
         img = ImageTk.PhotoImage(accueil_courch)
         can = tk.Canvas(w_accueil, width=img.width(), height=img.height())
         image_id = can.create_image(0, 0, anchor='nw', image=img)
@@ -1584,8 +1593,8 @@ def application():
         w_plan_station.title("Tout schuss à Courch !")
 
         # Affichage du plan
-        plan_station = Image.open("plan_station2.png")
-        #plan_station = Image.open("ProjetIN403-Courchevel/plan_station2.png")
+        #plan_station = Image.open("plan_station2.png")
+        plan_station = Image.open("ProjetIN403-Courchevel/plan_station2.png")
         img = ImageTk.PhotoImage(plan_station)
         canvas = tk.Canvas(w_plan_station, width=img.width(), height=img.height())
         canvas.create_image(0, 0, anchor='nw', image=img)
@@ -1605,6 +1614,7 @@ def application():
         retour = tk.Button(w_plan_station, text="Retour", font=("helvetica", "15"), command=retourNiveaux)
         valider = tk.Button(w_plan_station, text="Obtenir l'itinéraire", font=("helvetica", "15"), command=validerSommets)
         label_iti = tk.Label(w_plan_station, text="", font=("helvetica", "10"))
+        masquer = tk.Button(w_plan_station, text="Masquer", font=("helvetica", "15"), command=masquerIti)
 
         # Placement des widgets
         retour.grid(column=11, row=10)
