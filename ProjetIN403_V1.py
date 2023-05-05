@@ -1078,7 +1078,7 @@ def algoDijkstra(s_depart, s_arrivee):
     while len(sommets_marques) < nb_sommets :   # Tant qu'on n'a pas marqué tous les sommets
         sommets_marques.append(s_traitement)    # Ajout du sommet en cours de traitement aux sommets marqués
 
-        if type(successeurs[s_traitement]) == int :     # Regarde si le type est un int pour le cas ou il n'y a qu'un successeur
+        if type(successeurs[s_traitement]) == int :     # Regarde si le type est un int pour le cas où il n'y a qu'un successeur
             suc = [successeurs[s_traitement]]
         else:                                               # Sinon on recupère le tuple des successeurs
             suc = successeurs[s_traitement]
@@ -1088,7 +1088,7 @@ def algoDijkstra(s_depart, s_arrivee):
             if sommet not in sommets_marques :
                 d = distances[sommet][1]                    # Recupère la distance jusqu'au sommet
                 if somme + temps < d :                       # pour la comparer au nouveau temps calculé
-                    distances[sommet] = (s_traitement, somme + temps)
+                    distances[sommet] = (s_traitement, somme + temps)   #On stocke le sommet parent et le nouveau temps calculé
 
         # Recherche du prochain sommet à traiter parmi les sommets non marqués
         minimum = (None, infini)
