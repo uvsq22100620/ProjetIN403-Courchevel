@@ -1538,7 +1538,9 @@ def validerSommets():
     else:
         # Affichage du message d'erreur
         label_iti['text'] = "Veuillez sélectionner 2 sommets"
+    # Enlever la possibilité de déselectionner un sommet une fois qu'un itinéraire a été affiché
     canvas.unbind("<Button-3>", annulerSommetSelec)
+    # Laisser la possibilité de masquer l'itinéraire pour mieux voir le plan de la station
     valider.grid_remove()
     masquer.grid(column=10, row=10)
 
@@ -1547,6 +1549,7 @@ def masquerIti():
     ''' Permet de masquer les instructions de l'itinéraire '''
 
     label_iti["text"] = ''
+    # Ré-affichage du bouton pour valider les sommets et afficher l'itinéraire
     masquer.grid_remove()
     valider.grid(column=10, row=10)
 
