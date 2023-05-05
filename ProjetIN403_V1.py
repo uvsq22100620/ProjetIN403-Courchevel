@@ -1539,7 +1539,7 @@ def validerSommets():
         # Affichage du message d'erreur
         label_iti['text'] = "Veuillez sélectionner 2 sommets"
     # Enlever la possibilité de déselectionner un sommet une fois qu'un itinéraire a été affiché
-    canvas.unbind("<Button-3>", annulerSommetSelec)
+    canvas.unbind("<Button-3>")
     # Laisser la possibilité de masquer l'itinéraire pour mieux voir le plan de la station
     valider.grid_remove()
     masquer.grid(column=10, row=10)
