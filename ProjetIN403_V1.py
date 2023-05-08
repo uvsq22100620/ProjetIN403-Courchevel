@@ -1332,7 +1332,8 @@ def affichageTempsIti(tps_en_minutes):
     return res
 
 def etape_iti(historique, depart, fin):
-    '''Fonction permettant de décrire une étape de l'itinéraire lorsqu'il y a un changement de piste'''
+    '''Fonction permettant de décrire une étape de l'itinéraire lorsqu'il y a eu un changement dans 
+    l'itinéraire (par exemple un changement de piste)'''
 
     type_arc = historique[depart][0]   #Recupère le type de l'arc
 
@@ -1381,7 +1382,7 @@ def itineraire(l_sommets):
             depart = a      #On stocke le nouveau depart
 
     #On rappelle etape_iti pour obtenir la dernière étape de l'itinéraire
-    #et si on doit toujours rester sur la même piste cela permet aussi d'avoir une description d'itinéraire
+    #Cette instruction permet aussi de traiter le où l'itinéraire ne change jamais de piste du sommet de départ jusqu'au sommet d'arrivée
     iti += etape_iti(historique, depart, len(historique)-1)
 
     iti += 'Vous êtes arrivés ' + descriptionSommet(l_sommets[len(l_sommets)-1])
@@ -1548,6 +1549,7 @@ def validerSommets():
 
     if sA == 185:
         label_iti['text'] = "Aucun itinéraire n'est trouvé au départ de St Bon,\nveuillez vous renseigner au près des navettes à disposition"
+        return
 
     if (sA != 0) and (sB != 0):     # si 2 sommets ont bien été sélectionnés
         label_iti['text'] = ""
